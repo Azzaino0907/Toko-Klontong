@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeloMart • Toko Kelontong Berkah Jaya — Belanja Ceria, Harga Bersahaja!</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { display: ['Fredoka','sans-serif'], body: ['"Plus Jakarta Sans"','sans-serif'] },
+      colors: { inky:'#1A1023', cream:'#FFF9F0', berry:'#FF2E63', tangerine:'#FF9F1C', sun:'#FFC300', grape:'#845EC2', mint:'#2EC4B6', limepop:'#BFFF00', ocean:'#08D9D6', royal:'#252A34' },
+      boxShadow: { pop:'6px 6px 0 #1A1023', pops:'4px 4px 0 #1A1023', glow:'0 10px 40px -10px rgba(255,46,99,.5)' }
+    }
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<style>
+*{font-family:'Plus Jakarta Sans',sans-serif}
+h1,h2,h3,.font-display{font-family:'Fredoka',sans-serif!important}
+body{background:#FFF9F0;color:#1A1023;overflow-x:hidden}
+.dot-bg{background-image:radial-gradient(#1A1023 1.2px, transparent 1.2px);background-size:22px 22px;opacity:.08}
+.blob{position:absolute;border-radius:9999px;filter:blur(60px);opacity:.6;animation:floaty 7s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-24px) scale(1.05)}}
+@keyframes wiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+@keyframes bounceSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.float-anim{animation:bounceSoft 3.5s ease-in-out infinite}
+.grad-text{background:linear-gradient(90deg,#FF2E63,#FF9F1C,#845EC2,#2EC4B6);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:300% 100%;animation:gradMove 5s linear infinite}
+@keyframes gradMove{0%{background-position:0%}100%{background-position:300%}}
+.sticker{border:3px solid #1A1023;box-shadow:4px 4px 0 #1A1023}
+.card-lift{transition:.25s cubic-bezier(.34,1.56,.64,1)}
+.card-lift:hover{transform:translateY(-8px) rotate(-1deg)}
+.btn-pop{transition:.2s} .btn-pop:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #1A1023} .btn-pop:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #1A1023}
+.scroll-reveal{opacity:0;transform:translateY(40px);transition:.8s cubic-bezier(.16,1,.3,1)}
+.scroll-reveal.show{opacity:1;transform:none}
+.no-scrollbar::-webkit-scrollbar{display:none} .no-scrollbar{scrollbar-width:none}
+::-webkit-scrollbar{width:10px;height:10px} ::-webkit-scrollbar-track{background:#FFF9F0} ::-webkit-scrollbar-thumb{background:linear-gradient(#FF2E63,#FF9F1C);border-radius:99px;border:2px solid #FFF9F0}
+.code-window{font-family:'JetBrains Mono',monospace}
+.code-pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7}
+.tok-k{color:#FF7EDD} .tok-s{color:#BFFF00} .tok-v{color:#08D9D6} .tok-c{color:#6b7280;font-style:italic} .tok-f{color:#FFC300}
+.stock-bar{height:8px;border-radius:99px;background:#eee;overflow:hidden} .stock-fill{height:100%;border-radius:99px;transition:width .5s}
+.receipt-paper{background:repeating-linear-gradient(#fff 0 28px,#f8f8f8 28px 29px)}
+.zigzag{height:18px;background:linear-gradient(-45deg,transparent 12px,#fff 0) 0 0/24px 24px,linear-gradient(45deg,transparent 12px,#fff 0) 12px 0/24px 24px;transform:rotate(180deg)}
+.barcode{background:repeating-linear-gradient(90deg,#111 0 2px,transparent 2px 5px,#111 5px 6px,transparent 6px 10px)}
+.tab-active{background:#1A1023!important;color:#fff!important;border-color:#1A1023!important}
+input,select,textarea{outline:none} input:focus,select:focus,textarea:focus{border-color:#FF2E63!important;box-shadow:3px 3px 0 #FF2E63}
+#preloader{transition:opacity .6s, visibility .6s}
+.timer-box{background:linear-gradient(180deg,#2a2a3d,#1A1023);border:2px solid #FFC300}
+.erd-card{background:#fff;border:3px solid #1A1023;border-radius:16px;box-shadow:5px 5px 0 #1A1023;overflow:hidden}
+.erd-head{padding:8px 12px;font-weight:800;font-size:13px;color:#fff;display:flex;align-items:center;gap:8px}
+@media print{body *{visibility:hidden} #printArea,#printArea *{visibility:visible} #printArea{position:absolute;left:0;top:0;width:100%}}
+.wave-divider{margin-bottom:-2px}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- PRELOADER -->
+<div id="preloader" class="fixed inset-0 z-[999] bg-inky flex flex-col items-center justify-center gap-6">
+  <div class="relative">
+    <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-berry via-tangerine to-sun border-4 border-white shadow-glow flex items-center justify-center text-6xl animate-bounce">🛒</div>
+    <div class="absolute -top-3 -right-3 w-10 h-10 bg-mint border-3 border-white rounded-full flex items-center justify-center font-display font-bold animate-spin" style="animation-duration:3s;border:3px solid #fff">★</div>
+  </div>
+  <div class="text-white font-display text-3xl font-bold">Kelo<span class="text-sun">Mart</span> <span class="text-sm bg-berry px-2 py-1 rounded-lg align-middle">LOADING...</span></div>
+  <div class="w-64 h-3 bg-white/20 rounded-full overflow-hidden"><div id="loadBar" class="h-full w-0 bg-gradient-to-r from-berry via-sun to-mint rounded-full transition-all"></div></div>
+</div>
+
+<div id="toastWrap" class="fixed bottom-6 right-4 md:right-6 z-[400] flex flex-col gap-3 items-end"></div>
+<div class="fixed inset-0 dot-bg pointer-events-none z-0"></div>
+
+<!-- NAVBAR -->
+<nav class="sticky top-3 z-[90] mx-3 md:mx-6">
+  <div class="max-w-7xl mx-auto bg-white/95 backdrop-blur-xl border-[3px] border-inky rounded-2xl shadow-pop px-4 md:px-6 py-3 flex items-center gap-3">
+    <a href="#" class="flex items-center gap-2.5 shrink-0">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-berry via-tangerine to-sun border-[3px] border-inky flex items-center justify-center text-2xl shadow-pops" style="animation:wiggle 2.5s infinite">🛍️</div>
+      <div class="leading-none"><div class="font-display font-bold text-xl md:text-2xl">Kelo<span class="text-berry">Mart</span></div><div class="text-[10px] font-bold tracking-widest text-grape">TOKO KELONTONG • BERKAH JAYA</div></div>
+    </a>
+    <div class="hidden lg:flex items-center gap-1 mx-auto text-sm font-bold">
+      <a href="#katalog" class="px-4 py-2 rounded-xl hover:bg-sun/30 transition">🛒 Katalog</a>
+      <a href="#promo" class="px-4 py-2 rounded-xl hover:bg-berry/10 transition">🔥 Promo</a>
+      <a href="#kasir" class="px-4 py-2 rounded-xl hover:bg-mint/20 transition">🧾 Kasir POS</a>
+      <a href="#backend" class="px-4 py-2 rounded-xl hover:bg-grape/10 transition">💻 PHP & MySQL</a>
+      <a href="#hrd" class="px-4 py-2 rounded-xl hover:bg-tangerine/20 transition">👥 HRD</a>
+      <a href="#kontak" class="px-4 py-2 rounded-xl hover:bg-ocean/20 transition">📍 Lokasi</a>
+    </div>
+    <div class="flex items-center gap-2 ml-auto">
+      <button onclick="openAdmin()" class="hidden md:flex items-center gap-2 bg-inky text-white text-sm font-bold px-4 py-2.5 rounded-xl border-[3px] border-inky btn-pop"><i class="fa-solid fa-gear"></i> Admin</button>
+      <button onclick="toggleCart(true)" class="relative bg-gradient-to-r from-berry to-tangerine text-white font-bold px-4 md:px-5 py-2.5 rounded-xl border-[3px] border-inky btn-pop text-sm">
+        <i class="fa-solid fa-cart-shopping"></i> <span class="hidden md:inline">Keranjang</span>
+        <span id="cartCount" class="absolute -top-3 -right-3 w-7 h-7 bg-sun text-inky text-xs font-black rounded-full border-[3px] border-inky flex items-center justify-center">0</span>
+      </button>
+      <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" class="lg:hidden w-11 h-11 bg-sun border-[3px] border-inky rounded-xl font-bold"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+  <div id="mobileMenu" class="hidden lg:hidden max-w-7xl mx-auto mt-2 bg-white border-[3px] border-inky rounded-2xl shadow-pop p-3 grid grid-cols-2 gap-2 font-bold text-sm">
+    <a href="#katalog" class="p-3 bg-cream rounded-xl">🛒 Katalog</a><a href="#promo" class="p-3 bg-cream rounded-xl">🔥 Promo</a>
+    <a href="#kasir" class="p-3 bg-cream rounded-xl">🧾 Kasir POS</a><a href="#backend" class="p-3 bg-cream rounded-xl">💻 PHP & MySQL</a>
+    <a href="#hrd" class="p-3 bg-cream rounded-xl">👥 HRD</a><button onclick="openAdmin()" class="p-3 bg-inky text-white rounded-xl">⚙️ Admin Panel</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-14 pb-10">
+  <div class="blob w-72 h-72 bg-sun -left-10 top-10"></div>
+  <div class="blob w-96 h-96 bg-berry/50 right-0 top-0" style="animation-delay:-2s"></div>
+  <div class="blob w-64 h-64 bg-mint/60 left-1/3 bottom-0" style="animation-delay:-4s"></div>
+
+  <div class="relative grid lg:grid-cols-2 gap-10 items-center">
+    <div class="scroll-reveal show">
+      <div class="inline-flex items-center gap-2 bg-white border-[3px] border-inky rounded-full pl-2 pr-4 py-1.5 shadow-pops font-bold text-xs md:text-sm rotate-[-2deg]">
+        <span class="bg-gradient-to-r from-berry to-tangerine text-white px-3 py-1 rounded-full">BARU ✨</span> Sistem Kasir + HRD + PHP MySQL Terpadu!
+      </div>
+      <h1 class="font-display font-bold text-[42px] leading-[1.02] md:text-7xl mt-5">Belanja Sembako Semudah <span class="grad-text">Jajan Cilok!</span> 🛒</h1>
+      <p class="mt-4 text-inky/70 font-medium md:text-lg max-w-xl">Toko Kelontong <b>Berkah Jaya</b> — 1.500+ produk original, harga grosir, gratis ongkir, bayar QRIS/COD. Plus <b>source code PHP & MySQL terpisah</b> + modul <b>HRD Karyawan</b> siap pakai!</p>
+      <div class="mt-6 bg-white border-[3px] border-inky rounded-2xl shadow-pop p-2 flex flex-col md:flex-row gap-2 max-w-xl">
+        <div class="flex items-center gap-2 flex-1 px-3"><i class="fa-solid fa-magnifying-glass text-berry"></i><input id="heroSearch" onkeyup="if(event.key==='Enter')heroGo()" placeholder="Cari beras, minyak, mie, kopi..." class="w-full py-2.5 bg-transparent font-semibold text-sm border-0" style="box-shadow:none!important"></div>
+        <button onclick="heroGo()" class="bg-inky text-white font-bold px-6 py-3 rounded-xl btn-pop border-[3px] border-inky">Cari 🔍</button>
+      </div>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="#katalog" class="bg-gradient-to-r from-berry to-tangerine text-white font-display font-semibold px-7 py-3.5 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">🛒 Belanja Sekarang</a>
+        <a href="#backend" class="bg-white font-display font-semibold px-7 py-3.5 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">💻 Lihat Kode PHP</a>
+      </div>
+      <div class="mt-6 flex items-center gap-4">
+        <div class="flex -space-x-3">
+          <img src="https://i.pravatar.cc/80?img=12" class="w-10 h-10 rounded-full border-[3px] border-white shadow" alt=""><img src="https://i.pravatar.cc/80?img=32" class="w-10 h-10 rounded-full border-[3px] border-white shadow" alt=""><img src="https://i.pravatar.cc/80?img=45" class="w-10 h-10 rounded-full border-[3px] border-white shadow" alt=""><img src="https://i.pravatar.cc/80?img=56" class="w-10 h-10 rounded-full border-[3px] border-white shadow" alt="">
+          <div class="w-10 h-10 rounded-full bg-inky text-white border-[3px] border-white text-[10px] font-black flex items-center justify-center">8K+</div>
+        </div>
+        <div class="text-sm font-bold"><div class="text-tangerine">★★★★★ 4.9/5.0</div><div class="text-inky/60">dari 8.500+ pelanggan bahagia</div></div>
+      </div>
+      <div class="mt-6 grid grid-cols-4 gap-2 md:gap-3 max-w-xl">
+        <div class="bg-white border-[3px] border-inky rounded-2xl p-3 text-center shadow-pops"><div class="font-display font-bold text-lg md:text-2xl text-berry"><span class="counter" data-target="1500">0</span>+</div><div class="text-[10px] md:text-xs font-bold text-inky/60">PRODUK</div></div>
+        <div class="bg-white border-[3px] border-inky rounded-2xl p-3 text-center shadow-pops"><div class="font-display font-bold text-lg md:text-2xl text-grape"><span class="counter" data-target="8500">0</span>+</div><div class="text-[10px] md:text-xs font-bold text-inky/60">PELANGGAN</div></div>
+        <div class="bg-white border-[3px] border-inky rounded-2xl p-3 text-center shadow-pops"><div class="font-display font-bold text-lg md:text-2xl text-mint"><span class="counter" data-target="12">0</span> Thn</div><div class="text-[10px] md:text-xs font-bold text-inky/60">BERDIRI</div></div>
+        <div class="bg-white border-[3px] border-inky rounded-2xl p-3 text-center shadow-pops"><div class="font-display font-bold text-lg md:text-2xl text-tangerine">24/7</div><div class="text-[10px] md:text-xs font-bold text-inky/60">BUKA</div></div>
+      </div>
+    </div>
+
+    <div class="relative scroll-reveal show">
+      <div class="absolute inset-0 bg-gradient-to-br from-sun via-tangerine to-berry rounded-[32px] rotate-3 border-[4px] border-inky"></div>
+      <div class="relative bg-white border-[4px] border-inky rounded-[32px] overflow-hidden shadow-pop">
+        <div class="flex items-center gap-2 px-4 py-3 border-b-[3px] border-inky bg-cream"><span class="w-3 h-3 rounded-full bg-berry border border-inky"></span><span class="w-3 h-3 rounded-full bg-sun border border-inky"></span><span class="w-3 h-3 rounded-full bg-mint border border-inky"></span><span class="ml-2 text-xs font-bold text-inky/50">etalase-toko.jpg — LIVE 🟢</span></div>
+        <img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=800&q=80" onerror="this.src='https://picsum.photos/seed/toko/800/600'" class="w-full h-64 md:h-80 object-cover" alt="Toko">
+        <div class="p-4 grid grid-cols-3 gap-2 bg-white">
+          <div class="bg-cream border-2 border-inky rounded-xl p-2 text-center"><div class="text-2xl">🍚</div><div class="text-[11px] font-black">Beras 5kg</div><div class="text-[11px] font-bold text-berry">Rp 68rb</div></div>
+          <div class="bg-cream border-2 border-inky rounded-xl p-2 text-center"><div class="text-2xl">🫗</div><div class="text-[11px] font-black">Minyak 2L</div><div class="text-[11px] font-bold text-berry">Rp 42rb</div></div>
+          <div class="bg-cream border-2 border-inky rounded-xl p-2 text-center"><div class="text-2xl">🍜</div><div class="text-[11px] font-black">Indomie</div><div class="text-[11px] font-bold text-berry">Rp 3.5rb</div></div>
+        </div>
+      </div>
+      <div class="absolute -left-3 md:-left-8 top-8 bg-white border-[3px] border-inky rounded-2xl shadow-pop px-4 py-3 float-anim rotate-[-6deg]"><div class="text-xs font-bold text-inky/60">HARI INI</div><div class="font-display font-bold text-mint">+Rp 4,2 Jt 💰</div></div>
+      <div class="absolute -right-2 md:-right-6 top-1/3 bg-inky text-white border-[3px] border-inky rounded-2xl shadow-pop px-4 py-3 float-anim" style="animation-delay:-1.5s"><div class="text-xs font-bold opacity-70">STRUK #1024</div><div class="font-display font-bold text-sun">LUNAS ✅</div></div>
+      <div class="absolute left-6 -bottom-6 bg-sun border-[3px] border-inky rounded-2xl shadow-pop px-5 py-3 rotate-[3deg] flex items-center gap-3"><div class="w-10 h-10 bg-white rounded-xl border-2 border-inky flex items-center justify-center text-xl">🛵</div><div><div class="font-display font-bold leading-none">Gratis Ongkir!</div><div class="text-xs font-bold">Min. belanja Rp 100rb</div></div></div>
+      <div class="absolute -top-6 right-8 w-20 h-20 bg-berry text-white border-[3px] border-inky rounded-full flex items-center justify-center font-display font-bold text-center text-xs leading-tight rotate-12 shadow-pop" style="animation:spinSlow 12s linear infinite">FLASH<br>SALE ⚡</div>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="bg-inky text-white py-3 overflow-hidden border-y-[4px] border-inky -rotate-1 scale-[1.02] my-6 relative z-20">
+  <div class="marquee-track gap-8 font-display font-semibold text-sm md:text-base whitespace-nowrap">
+    <span class="flex gap-8 pr-8">🎉 GRATIS ONGKIR MIN. 100RB &nbsp;•&nbsp; ⚡ FLASH SALE TIAP JAM 12 &nbsp;•&nbsp; 💳 BISA QRIS / COD / TRANSFER &nbsp;•&nbsp; 🏆 HARGA GROSIR ECER &nbsp;•&nbsp; 👥 HRD + ABSENSI DIGITAL &nbsp;•&nbsp; 💻 SOURCE CODE PHP + MYSQL READY &nbsp;•&nbsp;</span>
+    <span class="flex gap-8 pr-8">🎉 GRATIS ONGKIR MIN. 100RB &nbsp;•&nbsp; ⚡ FLASH SALE TIAP JAM 12 &nbsp;•&nbsp; 💳 BISA QRIS / COD / TRANSFER &nbsp;•&nbsp; 🏆 HARGA GROSIR ECER &nbsp;•&nbsp; 👥 HRD + ABSENSI DIGITAL &nbsp;•&nbsp; 💻 SOURCE CODE PHP + MYSQL READY &nbsp;•&nbsp;</span>
+  </div>
+</div>
+
+<!-- PROMO COUNTDOWN -->
+<section id="promo" class="max-w-7xl mx-auto px-4 md:px-6 py-6">
+  <div class="relative overflow-hidden rounded-[28px] border-[4px] border-inky shadow-pop bg-gradient-to-r from-[#1A1023] via-[#3b1d5e] to-[#FF2E63] p-6 md:p-10 scroll-reveal">
+    <div class="blob w-64 h-64 bg-sun/70 -right-10 -top-10"></div>
+    <div class="relative grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <span class="bg-sun text-inky font-black text-xs px-3 py-1.5 rounded-full border-2 border-inky">⚡ FLASH SALE • BERAKHIR DALAM</span>
+        <h2 class="font-display font-bold text-white text-3xl md:text-5xl mt-3 leading-tight">Diskon s/d <span class="text-sun">70%</span><br>Sembako Pilihan!</h2>
+        <p class="text-white/70 font-medium mt-2">Pakai kode <button onclick="usePromo('CERIA10')" class="bg-white/20 border border-white/40 px-2 py-0.5 rounded-lg font-bold text-sun hover:bg-white/30">CERIA10</button> untuk ekstra 10% + gratis ongkir.</p>
+        <div class="flex gap-2.5 mt-5">
+          <div class="timer-box rounded-2xl w-20 py-3 text-center"><div id="cdH" class="font-display font-bold text-3xl text-white">11</div><div class="text-[10px] font-black text-sun tracking-widest">JAM</div></div>
+          <div class="font-display text-3xl text-sun self-center">:</div>
+          <div class="timer-box rounded-2xl w-20 py-3 text-center"><div id="cdM" class="font-display font-bold text-3xl text-white">23</div><div class="text-[10px] font-black text-sun tracking-widest">MENIT</div></div>
+          <div class="font-display text-3xl text-sun self-center">:</div>
+          <div class="timer-box rounded-2xl w-20 py-3 text-center"><div id="cdS" class="font-display font-bold text-3xl text-white">45</div><div class="text-[10px] font-black text-sun tracking-widest">DETIK</div></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white rounded-2xl border-[3px] border-inky p-3 rotate-[-2deg] card-lift"><div class="text-4xl text-center">🍚</div><div class="font-bold text-sm mt-1">Beras Premium 5kg</div><div class="text-xs line-through text-gray-400">Rp 82.000</div><div class="font-display font-bold text-berry text-lg">Rp 68.000</div><button onclick="quickAdd(1)" class="w-full mt-2 bg-inky text-white text-xs font-bold py-2 rounded-xl">+ Keranjang</button></div>
+        <div class="bg-white rounded-2xl border-[3px] border-inky p-3 rotate-[2deg] card-lift mt-6"><div class="text-4xl text-center">🫗</div><div class="font-bold text-sm mt-1">Minyak 2 Liter</div><div class="text-xs line-through text-gray-400">Rp 51.000</div><div class="font-display font-bold text-berry text-lg">Rp 42.500</div><button onclick="quickAdd(2)" class="w-full mt-2 bg-berry text-white text-xs font-bold py-2 rounded-xl">+ Keranjang</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KATALOG -->
+<section id="katalog" class="max-w-7xl mx-auto px-4 md:px-6 py-10">
+  <div class="flex flex-col md:flex-row md:items-end gap-4 justify-between scroll-reveal">
+    <div>
+      <span class="bg-mint text-inky font-black text-xs px-3 py-1.5 rounded-full border-[3px] border-inky shadow-pops">🛒 ETALASE TOKO</span>
+      <h2 class="font-display font-bold text-3xl md:text-5xl mt-3">Katalog <span class="grad-text">Produk Segar</span></h2>
+      <p class="text-inky/60 font-medium">Stok real-time • Harga grosir • <span id="prodTotalLabel">16</span> produk tersedia</p>
+    </div>
+    <div class="flex flex-col md:flex-row gap-2">
+      <div class="flex items-center gap-2 bg-white border-[3px] border-inky rounded-xl px-3 shadow-pops"><i class="fa-solid fa-magnifying-glass text-berry text-sm"></i><input id="searchInput" oninput="renderProducts()" placeholder="Cari produk..." class="py-2.5 bg-transparent text-sm font-semibold w-40 md:w-52 border-0" style="box-shadow:none!important"></div>
+      <select id="sortSelect" onchange="renderProducts()" class="bg-white border-[3px] border-inky rounded-xl px-3 py-2.5 text-sm font-bold shadow-pops cursor-pointer"><option value="pop">🔥 Paling Laris</option><option value="low">💰 Termurah</option><option value="high">💎 Termahal</option><option value="az">🔤 A - Z</option></select>
+    </div>
+  </div>
+  <div id="catChips" class="flex gap-2 mt-5 overflow-x-auto no-scrollbar pb-2 scroll-reveal"></div>
+  <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5 mt-5"></div>
+</section>
+
+<!-- KEUNGGULAN -->
+<section class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+  <div class="grid md:grid-cols-4 gap-4">
+    <div class="scroll-reveal bg-gradient-to-br from-berry to-tangerine text-white border-[3px] border-inky rounded-3xl p-6 shadow-pop rotate-[-1deg] card-lift"><div class="text-4xl">🚀</div><h3 class="font-display font-semibold text-xl mt-2">Antar 30 Menit</h3><p class="text-sm opacity-90 font-medium">Area 5km gratis ongkir. Lebih jauh? Kurir hemat cuma 8rb.</p></div>
+    <div class="scroll-reveal bg-white border-[3px] border-inky rounded-3xl p-6 shadow-pop rotate-[1deg] card-lift"><div class="text-4xl">💯</div><h3 class="font-display font-semibold text-xl mt-2">100% Original</h3><p class="text-sm text-inky/60 font-medium">Distributor resmi. Expired? Garansi tukar baru langsung.</p></div>
+    <div class="scroll-reveal bg-gradient-to-br from-grape to-ocean text-white border-[3px] border-inky rounded-3xl p-6 shadow-pop rotate-[-1deg] card-lift"><div class="text-4xl">🧾</div><h3 class="font-display font-semibold text-xl mt-2">Kasir POS Digital</h3><p class="text-sm opacity-90 font-medium">Struk otomatis, QRIS, stok berkurang sendiri.</p></div>
+    <div class="scroll-reveal bg-sun border-[3px] border-inky rounded-3xl p-6 shadow-pop rotate-[1deg] card-lift"><div class="text-4xl">👥</div><h3 class="font-display font-semibold text-xl mt-2">HRD Terpadu</h3><p class="text-sm font-medium text-inky/70">Kelola karyawan, absensi & slip gaji satu dashboard.</p></div>
+  </div>
+</section>
+
+<!-- KASIR BANNER -->
+<section id="kasir" class="max-w-7xl mx-auto px-4 md:px-6 py-8">
+  <div class="scroll-reveal relative overflow-hidden bg-white border-[4px] border-inky rounded-[28px] shadow-pop p-6 md:p-10 grid md:grid-cols-2 gap-8 items-center">
+    <div class="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-berry via-sun via-mint to-grape"></div>
+    <div>
+      <span class="bg-inky text-sun font-black text-xs px-3 py-1.5 rounded-full">🧾 MODE KASIR / POS</span>
+      <h2 class="font-display font-bold text-3xl md:text-4xl mt-3">Kasir Secepat <span class="text-berry">Kilatan!</span> ⚡</h2>
+      <ul class="mt-4 space-y-2.5 font-semibold text-sm md:text-base">
+        <li class="flex gap-2 items-center"><span class="w-7 h-7 bg-mint rounded-lg border-2 border-inky flex items-center justify-center text-sm">✓</span> Scan / klik produk, total otomatis</li>
+        <li class="flex gap-2 items-center"><span class="w-7 h-7 bg-sun rounded-lg border-2 border-inky flex items-center justify-center text-sm">✓</span> Hitung kembalian + cetak struk</li>
+        <li class="flex gap-2 items-center"><span class="w-7 h-7 bg-berry text-white rounded-lg border-2 border-inky flex items-center justify-center text-sm">✓</span> Stok gudang terpotong real-time</li>
+        <li class="flex gap-2 items-center"><span class="w-7 h-7 bg-grape text-white rounded-lg border-2 border-inky flex items-center justify-center text-sm">✓</span> Rekap omzet harian otomatis</li>
+      </ul>
+      <div class="flex flex-wrap gap-3 mt-6">
+        <button onclick="openAdmin('pos')" class="bg-gradient-to-r from-grape to-berry text-white font-display font-semibold px-7 py-3 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">Buka Kasir POS 🧾</button>
+        <button onclick="openAdmin('transaksi')" class="bg-white font-display font-semibold px-7 py-3 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">Riwayat Transaksi</button>
+      </div>
+    </div>
+    <div class="bg-cream border-[3px] border-inky rounded-2xl p-4 shadow-pops rotate-1">
+      <div class="bg-white border-2 border-inky rounded-xl p-4 receipt-paper">
+        <div class="text-center"><div class="font-display font-bold text-lg">🏪 BERKAH JAYA</div><div class="text-[11px] font-bold text-gray-500">Jl. Ceria No. 88, Jakarta • 0812-8888-8888</div><div class="border-t-2 border-dashed border-gray-300 my-2"></div></div>
+        <div class="text-xs font-semibold space-y-1"><div class="flex justify-between"><span>Beras 5kg x1</span><span>68.000</span></div><div class="flex justify-between"><span>Indomie x5</span><span>17.500</span></div><div class="flex justify-between"><span>Kopi x2</span><span>24.000</span></div><div class="border-t-2 border-dashed border-gray-300 my-2"></div><div class="flex justify-between font-black text-sm"><span>TOTAL</span><span class="text-berry">Rp 109.500</span></div><div class="flex justify-between"><span>Tunai</span><span>120.000</span></div><div class="flex justify-between"><span>Kembali</span><span>10.500</span></div></div>
+        <div class="barcode h-10 mt-3 rounded"></div><div class="text-center text-[10px] font-bold mt-1">* TERIMA KASIH *</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BACKEND PHP & MYSQL -->
+<section id="backend" class="mt-10 bg-inky text-white border-y-[4px] border-inky relative overflow-hidden">
+  <div class="blob w-96 h-96 bg-grape/60 -left-20 top-0"></div><div class="blob w-96 h-96 bg-berry/50 right-0 bottom-0"></div>
+  <div class="relative max-w-7xl mx-auto px-4 md:px-6 py-14">
+    <div class="text-center scroll-reveal">
+      <span class="bg-gradient-to-r from-sun to-tangerine text-inky font-black text-xs px-4 py-2 rounded-full border-[3px] border-white">💻 PROGRAM TERPISAH • HTML + CSS + JS + PHP + MYSQL</span>
+      <h2 class="font-display font-bold text-3xl md:text-5xl mt-4">Source Code <span class="text-sun">Backend</span> Siap Copy! ⚡</h2>
+      <p class="text-white/60 font-medium max-w-2xl mx-auto mt-2">Demo di atas berjalan dengan JavaScript + LocalStorage (simulasi MySQL). Di bawah ini adalah <b class="text-white">file PHP & SQL asli yang terpisah</b> — tinggal copy ke XAMPP / hosting. Klik file untuk lihat, copy, & download!</p>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-3 mt-8 scroll-reveal">
+      <div class="bg-white/10 backdrop-blur border-2 border-white/20 rounded-2xl p-4"><div class="w-10 h-10 bg-sun rounded-xl flex items-center justify-center text-xl border-2 border-white">1️⃣</div><div class="font-display font-semibold mt-2">Install XAMPP</div><div class="text-xs text-white/60 font-medium">Nyalakan Apache + MySQL, buka phpMyAdmin.</div></div>
+      <div class="bg-white/10 backdrop-blur border-2 border-white/20 rounded-2xl p-4"><div class="w-10 h-10 bg-mint rounded-xl flex items-center justify-center text-xl border-2 border-white">2️⃣</div><div class="font-display font-semibold mt-2">Import SQL</div><div class="text-xs text-white/60 font-medium">Buat DB <b class="text-sun">toko_kelontong</b> lalu import file .sql.</div></div>
+      <div class="bg-white/10 backdrop-blur border-2 border-white/20 rounded-2xl p-4"><div class="w-10 h-10 bg-berry rounded-xl flex items-center justify-center text-xl border-2 border-white">3️⃣</div><div class="font-display font-semibold mt-2">Copy ke htdocs</div><div class="text-xs text-white/60 font-medium">Taruh semua .php di <b class="text-sun">htdocs/kelontong/</b>.</div></div>
+      <div class="bg-white/10 backdrop-blur border-2 border-white/20 rounded-2xl p-4"><div class="w-10 h-10 bg-grape rounded-xl flex items-center justify-center text-xl border-2 border-white">4️⃣</div><div class="font-display font-semibold mt-2">Jalankan!</div><div class="text-xs text-white/60 font-medium">Buka <b class="text-sun">localhost/kelontong</b> — jadi!</div></div>
+    </div>
+
+    <!-- VS CODE WINDOW -->
+    <div class="mt-8 scroll-reveal bg-[#12101d] border-[3px] border-white/30 rounded-3xl overflow-hidden shadow-2xl">
+      <div class="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10">
+        <span class="w-3.5 h-3.5 rounded-full bg-[#FF5F57]"></span><span class="w-3.5 h-3.5 rounded-full bg-[#FEBC2E]"></span><span class="w-3.5 h-3.5 rounded-full bg-[#28C840]"></span>
+        <span class="ml-3 text-xs font-bold text-white/50">📁 kelontong — Visual Studio Code</span>
+        <div class="ml-auto flex gap-2">
+          <button onclick="copyCode()" class="text-xs font-bold bg-sun text-inky px-3 py-1.5 rounded-lg hover:scale-105 transition"><i class="fa-solid fa-copy"></i> Copy</button>
+          <button onclick="downloadCode()" class="text-xs font-bold bg-mint text-inky px-3 py-1.5 rounded-lg hover:scale-105 transition"><i class="fa-solid fa-download"></i> Download</button>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-[260px_1fr]">
+        <div class="border-r border-white/10 bg-black/30 p-3 max-h-[420px] overflow-y-auto">
+          <div class="text-[11px] font-black text-white/40 tracking-widest px-2 mb-2">EXPLORER — 11 FILES</div>
+          <div id="fileTree" class="space-y-1 text-sm font-semibold"></div>
+          <div class="mt-4 p-3 bg-gradient-to-br from-berry/30 to-grape/30 border border-white/20 rounded-xl"><div class="text-xs font-black text-sun">💡 STRUKTUR FOLDER</div><div class="text-[11px] text-white/60 font-mono mt-1 leading-relaxed">/kelontong<br>├─ config/<br>├─ admin/<br>├─ auth/<br>├─ api/<br>└─ database/</div></div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 px-4 py-2.5 bg-white/5 border-b border-white/10 overflow-x-auto no-scrollbar">
+            <span id="codeTab" class="text-xs font-bold bg-sun text-inky px-3 py-1.5 rounded-lg whitespace-nowrap">config/koneksi.php</span>
+            <span id="codeLang" class="text-[11px] font-bold text-mint ml-auto whitespace-nowrap">● PHP • MySQLi</span>
+          </div>
+          <div class="flex max-h-[420px] overflow-auto">
+            <div id="lineNums" class="text-right pr-3 pl-4 py-4 text-white/25 font-mono text-[13px] leading-[1.7] select-none shrink-0 bg-black/20"></div>
+            <pre class="py-4 pr-6 pl-1 flex-1"><code id="codeView" class="code-pre text-gray-100 whitespace-pre"></code></pre>
+          </div>
+          <div class="px-4 py-2 bg-gradient-to-r from-berry via-grape to-ocean text-[11px] font-bold flex gap-4 overflow-x-auto no-scrollbar whitespace-nowrap"><span>⎇ main*</span><span>◉ PHP 8.2</span><span>▦ MySQL 8.0</span><span class="ml-auto">UTF-8 • LF • ✓ No errors</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERD -->
+    <div class="mt-10 scroll-reveal">
+      <div class="flex flex-col md:flex-row md:items-center gap-3 justify-between">
+        <div><h3 class="font-display font-bold text-2xl md:text-3xl">🗄️ ERD — Relasi Database <span class="text-sun">MySQL</span></h3><p class="text-white/60 text-sm font-medium">9 tabel • Relasi 1:N • Foreign key terjaga • Sudah termasuk tabel HRD (karyawan, absensi, penggajian)</p></div>
+        <div class="flex gap-2 text-xs font-bold"><span class="bg-berry px-3 py-1.5 rounded-full">🔑 PK</span><span class="bg-mint text-inky px-3 py-1.5 rounded-full">🔗 FK</span><span class="bg-sun text-inky px-3 py-1.5 rounded-full">1 ──∞ Relasi</span></div>
+      </div>
+      <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6 text-inky">
+        <div class="erd-card"><div class="erd-head bg-gradient-to-r from-berry to-tangerine">📂 kategori</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_kategori</b> INT AI</div><div>📝 nama_kategori VARCHAR</div><div>🎨 icon VARCHAR</div></div></div>
+        <div class="erd-card"><div class="erd-head bg-gradient-to-r from-tangerine to-sun !text-inky">📦 produk</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_produk</b> INT AI</div><div>🔗 id_kategori INT → kategori</div><div>📝 nama, harga, stok, satuan</div><div>🖼️ gambar, deskripsi</div></div></div>
+        <div class="erd-card"><div class="erd-head bg-gradient-to-r from-grape to-berry">👤 users</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_user</b> INT AI</div><div>📝 username, password</div><div>🎭 role: admin/kasir</div></div></div>
+        <div class="erd-card"><div class="erd-head bg-gradient-to-r from-mint to-ocean !text-inky">🧑‍🤝‍🧑 pelanggan</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_pelanggan</b> INT AI</div><div>📝 nama, no_hp, alamat</div><div>📍 titik_antar TEXT</div></div></div>
+        <div class="erd-card"><div class="erd-head bg-gradient-to-r from-pink-500 to-berry">🧾 transaksi</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_transaksi</b> INT AI</div><div>🔗 id_user → users</div><div>🔗 id_pelanggan → pelanggan</div><div>📝 tanggal, total, bayar, kembalian, metode</div></div></div>
+        <div class="erd-card"><div class="erd-head bg-gradient-to-r from-ocean to-mint !text-inky">📋 detail_transaksi</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_detail</b> INT AI</div><div>🔗 id_transaksi → transaksi</div><div>🔗 id_produk → produk</div><div>📝 qty, harga_satuan, subtotal</div></div></div>
+        <div class="erd-card ring-4 ring-sun"><div class="erd-head bg-gradient-to-r from-sun to-tangerine !text-inky">👥 karyawan (HRD) ⭐</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 <b>id_karyawan</b> INT AI</div><div>📝 nama, jabatan, no_hp</div><div>💰 gaji_pokok, tunjangan</div><div>📌 status, tgl_masuk, foto</div></div></div>
+        <div class="erd-card"><div class="erd-head bg-inky">🗓️ absensi + penggajian</div><div class="p-3 text-[12px] font-mono space-y-1"><div>🔑 id_absensi / id_gaji INT AI</div><div>🔗 id_karyawan → karyawan</div><div>📝 tanggal, jam_masuk/pulang, status</div><div>💵 periode, total_gaji, bonus</div></div></div>
+      </div>
+      <div class="mt-4 bg-white/10 border border-white/20 rounded-2xl p-4 text-sm font-medium text-white/80 flex flex-col md:flex-row gap-2 md:items-center"><span class="font-black text-sun shrink-0">🔗 RELASI:</span><span class="font-mono text-xs">kategori 1──∞ produk &nbsp;•&nbsp; users 1──∞ transaksi &nbsp;•&nbsp; pelanggan 1──∞ transaksi &nbsp;•&nbsp; transaksi 1──∞ detail_transaksi &nbsp;•&nbsp; produk 1──∞ detail_transaksi &nbsp;•&nbsp; karyawan 1──∞ absensi &nbsp;•&nbsp; karyawan 1──∞ penggajian</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HRD SECTION -->
+<section id="hrd" class="max-w-7xl mx-auto px-4 md:px-6 py-14">
+  <div class="text-center scroll-reveal">
+    <span class="bg-grape text-white font-black text-xs px-4 py-2 rounded-full border-[3px] border-inky shadow-pops">👥 MODUL HRD • HUMAN RESOURCE DEPARTMENT</span>
+    <h2 class="font-display font-bold text-3xl md:text-5xl mt-4">Kelola Karyawan <span class="grad-text">Super Gampang!</span></h2>
+    <p class="text-inky/60 font-medium max-w-xl mx-auto">Data karyawan, absensi harian, hitung gaji + tunjangan otomatis, dan cetak slip gaji. Semua terhubung ke database MySQL.</p>
+  </div>
+  <div class="grid md:grid-cols-3 gap-4 mt-8">
+    <div class="scroll-reveal bg-white border-[3px] border-inky rounded-3xl p-6 shadow-pop card-lift">
+      <div class="flex items-center justify-between"><div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-grape to-berry flex items-center justify-center text-3xl border-[3px] border-inky">👔</div><span class="bg-mint/20 text-emerald-700 text-xs font-black px-3 py-1 rounded-full border-2 border-emerald-600">● <span id="hrdActiveCount">6</span> AKTIF</span></div>
+      <h3 class="font-display font-semibold text-xl mt-3">Data Karyawan</h3>
+      <div id="hrdPreview" class="mt-3 space-y-2"></div>
+      <button onclick="openAdmin('hrd')" class="w-full mt-4 bg-inky text-white font-bold py-3 rounded-xl btn-pop border-[3px] border-inky text-sm">Kelola Karyawan →</button>
+    </div>
+    <div class="scroll-reveal bg-gradient-to-br from-sun to-tangerine border-[3px] border-inky rounded-3xl p-6 shadow-pop card-lift">
+      <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-3xl border-[3px] border-inky">🗓️</div>
+      <h3 class="font-display font-semibold text-xl mt-3">Absensi Hari Ini</h3>
+      <p class="text-xs font-bold text-inky/60" id="absensiDate">—</p>
+      <div class="mt-3 bg-white border-[3px] border-inky rounded-2xl p-3 flex items-center justify-between"><div><div class="font-display font-bold text-2xl" id="absenHadir">5/6</div><div class="text-xs font-bold text-inky/50">HADIR TEPAT WAKTU</div></div><div class="text-5xl">✅</div></div>
+      <div class="grid grid-cols-3 gap-2 mt-3 text-center text-xs font-black"><div class="bg-white border-2 border-inky rounded-xl py-2">🟢 Hadir<br><span id="stHadir">5</span></div><div class="bg-white border-2 border-inky rounded-xl py-2">🟡 Terlambat<br><span id="stTelat">1</span></div><div class="bg-white border-2 border-inky rounded-xl py-2">🔴 Izin<br>0</div></div>
+      <button onclick="openAdmin('absensi')" class="w-full mt-4 bg-white font-bold py-3 rounded-xl btn-pop border-[3px] border-inky text-sm">Catat Kehadiran →</button>
+    </div>
+    <div class="scroll-reveal bg-inky text-white border-[3px] border-inky rounded-3xl p-6 shadow-pop card-lift">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-mint to-ocean flex items-center justify-center text-3xl border-[3px] border-white">💵</div>
+      <h3 class="font-display font-semibold text-xl mt-3">Penggajian Otomatis</h3>
+      <div class="mt-3 space-y-2 text-sm font-semibold">
+        <div class="flex justify-between bg-white/10 rounded-xl px-3 py-2"><span class="text-white/60">Total Gaji Pokok</span><span class="text-sun">Rp 23,2 Jt</span></div>
+        <div class="flex justify-between bg-white/10 rounded-xl px-3 py-2"><span class="text-white/60">Tunjangan + Bonus</span><span class="text-mint">Rp 4,8 Jt</span></div>
+        <div class="flex justify-between bg-gradient-to-r from-berry to-tangerine rounded-xl px-3 py-2.5 font-black"><span>TOTAL PAYROLL</span><span>Rp 28,0 Jt</span></div>
+      </div>
+      <button onclick="openAdmin('gaji')" class="w-full mt-4 bg-sun text-inky font-bold py-3 rounded-xl btn-pop border-[3px] border-white text-sm">Lihat Slip Gaji →</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="bg-gradient-to-r from-berry via-tangerine to-sun border-y-[4px] border-inky py-12 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 md:px-6">
+    <h2 class="font-display font-bold text-2xl md:text-4xl text-white text-center drop-shadow-lg scroll-reveal">💬 Kata Tetangga Sekampung</h2>
+    <div id="testiWrap" class="flex gap-4 mt-6 overflow-x-auto no-scrollbar pb-2 scroll-reveal"></div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section id="kontak" class="max-w-7xl mx-auto px-4 md:px-6 py-14">
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="scroll-reveal bg-white border-[4px] border-inky rounded-[28px] shadow-pop p-6 md:p-8">
+      <span class="bg-ocean/20 text-cyan-700 font-black text-xs px-3 py-1.5 rounded-full border-2 border-cyan-600">📍 KUNJUNGI TOKO KAMI</span>
+      <h2 class="font-display font-bold text-3xl mt-3">Mampir, Ngopi, Belanja! ☕</h2>
+      <div class="mt-4 space-y-3 font-semibold text-sm">
+        <div class="flex gap-3 items-start bg-cream border-2 border-inky rounded-xl p-3"><span class="text-xl">🏪</span><div><b>Warung Berkah Jaya (KeloMart)</b><br><span class="text-inky/60">Jl. Ceria Raya No. 88, Kel. Sukamaju, Jakarta Selatan</span></div></div>
+        <div class="flex gap-3 items-center bg-cream border-2 border-inky rounded-xl p-3"><span class="text-xl">⏰</span><div><b>Buka Setiap Hari 06.00 – 22.00</b> <span class="bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-black">● BUKA SEKARANG</span></div></div>
+        <div class="flex gap-3 items-center bg-cream border-2 border-inky rounded-xl p-3"><span class="text-xl">📞</span><div><b>0812-8888-8888</b> (WA / Telp) • <b>@kelomart.id</b></div></div>
+      </div>
+      <div class="flex gap-3 mt-5">
+        <a href="https://wa.me/6281288888888?text=Halo%20KeloMart!%20Saya%20mau%20pesan%20sembako." target="_blank" class="flex-1 text-center bg-[#25D366] text-white font-display font-semibold px-5 py-3 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">💬 Pesan via WA</a>
+        <button onclick="toggleCart(true)" class="flex-1 bg-inky text-white font-display font-semibold px-5 py-3 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">🛒 Lihat Keranjang</button>
+      </div>
+    </div>
+    <div class="scroll-reveal border-[4px] border-inky rounded-[28px] shadow-pop overflow-hidden min-h-[320px] bg-white">
+      <iframe src="https://maps.google.com/maps?q=Pasar%20Santa%20Jakarta%20Selatan&t=&z=14&ie=UTF8&iwloc=&output=embed" class="w-full h-full min-h-[380px]" style="border:0" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-inky text-white border-t-[4px] border-inky">
+  <div class="h-2 bg-gradient-to-r from-berry via-sun via-mint to-grape"></div>
+  <div class="max-w-7xl mx-auto px-4 md:px-6 py-12 grid md:grid-cols-4 gap-8">
+    <div><div class="flex items-center gap-2"><div class="w-11 h-11 rounded-xl bg-gradient-to-br from-berry via-tangerine to-sun flex items-center justify-center text-2xl border-2 border-white">🛍️</div><div class="font-display font-bold text-2xl">KeloMart</div></div><p class="text-white/50 text-sm font-medium mt-3">Toko kelontong modern rasa kekeluargaan. Sembako lengkap, harga jujur, pelayanan tulus sejak 2014.</p><div class="flex gap-2 mt-4"><a href="#" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center hover:bg-berry transition border border-white/20"><i class="fa-brands fa-instagram"></i></a><a href="#" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center hover:bg-ocean transition border border-white/20"><i class="fa-brands fa-tiktok"></i></a><a href="#" class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center hover:bg-mint transition border border-white/20"><i class="fa-brands fa-whatsapp"></i></a></div></div>
+    <div><div class="font-display font-semibold text-lg text-sun">Belanja</div><ul class="mt-3 space-y-2 text-sm font-medium text-white/60"><li><a href="#katalog" class="hover:text-white">Katalog Produk</a></li><li><a href="#promo" class="hover:text-white">Flash Sale</a></li><li><a href="#kasir" class="hover:text-white">Kasir POS</a></li><li><a href="#" onclick="toggleCart(true);return false" class="hover:text-white">Keranjang</a></li></ul></div>
+    <div><div class="font-display font-semibold text-lg text-mint">Developer</div><ul class="mt-3 space-y-2 text-sm font-medium text-white/60"><li><a href="#backend" class="hover:text-white">Source Code PHP</a></li><li><a href="#backend" class="hover:text-white">Database MySQL (.sql)</a></li><li><a href="#backend" class="hover:text-white">ERD Diagram</a></li><li><a href="#hrd" class="hover:text-white">Modul HRD</a></li></ul></div>
+    <div><div class="font-display font-semibold text-lg text-berry">Tetap Terhubung 📬</div><p class="text-white/50 text-sm font-medium mt-2">Dapatkan info promo tiap Jumat berkah!</p><div class="flex gap-2 mt-3"><input id="nlInput" placeholder="Email kamu..." class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2.5 text-sm font-semibold placeholder:text-white/30"><button onclick="subscribe()" class="bg-gradient-to-r from-berry to-tangerine px-4 rounded-xl font-bold text-sm border border-white/30">Gas!</button></div></div>
+  </div>
+  <div class="border-t border-white/10 py-5 text-center text-xs font-bold text-white/40 px-4">© 2026 KeloMart • Toko Kelontong Berkah Jaya • Dibuat dengan 💖 pakai HTML • CSS • JS • PHP • MySQL • Demo frontend + backend terpisah</div>
+</footer>
+
+<!-- FLOATING -->
+<div class="fixed bottom-5 left-4 z-[95] flex flex-col gap-2">
+  <a href="https://wa.me/6281288888888" target="_blank" class="w-13 h-13 md:w-14 md:h-14 bg-[#25D366] border-[3px] border-inky rounded-2xl shadow-pop flex items-center justify-center text-2xl btn-pop p-3" title="Chat WA">💬</a>
+</div>
+
+<!-- CART DRAWER -->
+<div id="cartOverlay" onclick="toggleCart(false)" class="fixed inset-0 bg-inky/60 backdrop-blur-sm z-[100] hidden"></div>
+<aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-cream z-[101] border-l-[4px] border-inky translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="p-5 bg-gradient-to-r from-berry to-tangerine border-b-[4px] border-inky flex items-center gap-3">
+    <div class="w-12 h-12 bg-white rounded-2xl border-[3px] border-inky flex items-center justify-center text-2xl">🛒</div>
+    <div class="text-white"><div class="font-display font-bold text-xl">Keranjang Belanja</div><div class="text-xs font-bold opacity-80" id="cartSubLabel">0 barang</div></div>
+    <button onclick="toggleCart(false)" class="ml-auto w-10 h-10 bg-white rounded-xl border-[3px] border-inky font-black btn-pop">✕</button>
+  </div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+  <div class="p-4 bg-white border-t-[4px] border-inky space-y-3">
+    <div class="flex gap-2"><input id="promoInput" placeholder="Kode promo (coba: CERIA10)" class="flex-1 border-[3px] border-inky rounded-xl px-3 py-2.5 text-sm font-bold uppercase"><button onclick="applyPromo()" class="bg-sun font-black text-sm px-4 rounded-xl border-[3px] border-inky btn-pop">Pakai</button></div>
+    <div class="text-sm font-bold space-y-1.5 bg-cream border-2 border-inky rounded-xl p-3"><div class="flex justify-between"><span class="text-inky/60">Subtotal</span><span id="ctSub">Rp 0</span></div><div class="flex justify-between"><span class="text-inky/60">Diskon</span><span id="ctDisc" class="text-emerald-600">-Rp 0</span></div><div class="flex justify-between"><span class="text-inky/60">Ongkir</span><span id="ctShip">Rp 8.000</span></div><div class="flex justify-between font-display text-lg border-t-2 border-dashed border-inky/20 pt-1.5"><span>TOTAL</span><span id="ctTotal" class="text-berry">Rp 0</span></div></div>
+    <button onclick="openCheckout()" class="w-full bg-inky text-white font-display font-semibold text-lg py-3.5 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">Checkout Sekarang 🚀</button>
+  </div>
+</aside>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-inky/70 backdrop-blur-sm">
+  <div class="bg-cream border-[4px] border-inky rounded-[28px] shadow-pop w-full max-w-2xl max-h-[92vh] overflow-y-auto">
+    <div class="p-5 bg-gradient-to-r from-grape via-berry to-tangerine border-b-[4px] border-inky flex items-center gap-3 sticky top-0 z-10">
+      <div class="w-12 h-12 bg-white rounded-2xl border-[3px] border-inky flex items-center justify-center text-2xl">🧾</div>
+      <div class="text-white"><div class="font-display font-bold text-xl">Checkout Pesanan</div><div class="text-xs font-bold opacity-80">Isi data & pilih pembayaran</div></div>
+      <button onclick="closeCheckout()" class="ml-auto w-10 h-10 bg-white rounded-xl border-[3px] border-inky font-black btn-pop">✕</button>
+    </div>
+    <div id="checkoutForm" class="p-5 grid md:grid-cols-2 gap-4">
+      <div class="space-y-3">
+        <div><label class="text-xs font-black">NAMA LENGKAP *</label><input id="coName" placeholder="cth: Budi Santoso" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2.5 text-sm font-semibold bg-white"></div>
+        <div><label class="text-xs font-black">NO. WHATSAPP *</label><input id="coPhone" placeholder="cth: 0812xxxx" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2.5 text-sm font-semibold bg-white"></div>
+        <div><label class="text-xs font-black">ALAMAT ANTAR *</label><textarea id="coAddr" rows="2" placeholder="Jalan, RT/RW, patokan..." class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2.5 text-sm font-semibold bg-white"></textarea></div>
+        <div><label class="text-xs font-black">CATATAN (opsional)</label><input id="coNote" placeholder="cth: cabai dipisah ya..." class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2.5 text-sm font-semibold bg-white"></div>
+      </div>
+      <div class="space-y-3">
+        <div><label class="text-xs font-black">METODE PEMBAYARAN</label><div class="grid grid-cols-2 gap-2 mt-1" id="payMethods">
+          <button onclick="setPay('QRIS',this)" class="pay-btn border-[3px] border-inky rounded-xl p-3 text-left bg-white"><div class="text-xl">📱</div><div class="text-xs font-black">QRIS</div><div class="text-[10px] text-inky/50 font-bold">Scan & lunas</div></button>
+          <button onclick="setPay('COD',this)" class="pay-btn border-[3px] border-inky rounded-xl p-3 text-left bg-white"><div class="text-xl">💵</div><div class="text-[10px] font-black">COD</div><div class="text-[10px] text-inky/50 font-bold">Bayar di tempat</div></button>
+          <button onclick="setPay('Transfer',this)" class="pay-btn border-[3px] border-inky rounded-xl p-3 text-left bg-white"><div class="text-xl">🏦</div><div class="text-[10px] font-black">Transfer</div><div class="text-[10px] text-inky/50 font-bold">BCA / BRI / DANA</div></button>
+          <button onclick="setPay('Tunai di Toko',this)" class="pay-btn border-[3px] border-inky rounded-xl p-3 text-left bg-white"><div class="text-xl">🏪</div><div class="text-[10px] font-black">Ambil di Toko</div><div class="text-[10px] text-inky/50 font-bold">Bayar kasir</div></button>
+        </div></div>
+        <div id="checkoutSummary" class="bg-white border-[3px] border-inky rounded-xl p-3 text-sm font-bold"></div>
+        <button onclick="processCheckout()" class="w-full bg-gradient-to-r from-berry to-tangerine text-white font-display font-semibold text-lg py-3.5 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">Bayar Sekarang 💳</button>
+      </div>
+    </div>
+    <div id="receiptWrap" class="hidden p-5">
+      <div class="text-center mb-4"><div class="inline-block bg-emerald-500 text-white font-black text-sm px-4 py-2 rounded-full border-[3px] border-inky">✅ PESANAN BERHASIL!</div></div>
+      <div id="printArea" class="max-w-sm mx-auto"><div class="zigzag"></div>
+        <div class="bg-white px-6 py-5 receipt-paper border-x-[3px] border-inky">
+          <div class="text-center"><div class="font-display font-bold text-xl">🏪 BERKAH JAYA</div><div class="text-[11px] font-bold text-gray-500">Jl. Ceria No.88 • 0812-8888-8888</div><div id="rcMeta" class="text-[11px] font-bold text-gray-500 mt-1"></div><div class="border-t-2 border-dashed border-gray-300 my-2"></div></div>
+          <div id="rcItems" class="text-xs font-semibold space-y-1"></div>
+          <div class="border-t-2 border-dashed border-gray-300 my-2"></div>
+          <div id="rcTotal" class="text-xs font-bold space-y-1"></div>
+          <div class="barcode h-10 mt-3 rounded"></div>
+          <div class="text-center text-[10px] font-bold mt-1">Simpan struk ini • * TERIMA KASIH * 🙏</div>
+        </div><div class="zigzag" style="transform:none"></div>
+      </div>
+      <div class="flex gap-2 max-w-sm mx-auto mt-4">
+        <button onclick="window.print()" class="flex-1 bg-white font-bold py-3 rounded-xl border-[3px] border-inky btn-pop text-sm">🖨️ Cetak</button>
+        <button onclick="waReceipt()" class="flex-1 bg-[#25D366] text-white font-bold py-3 rounded-xl border-[3px] border-inky btn-pop text-sm">💬 Kirim WA</button>
+        <button onclick="closeCheckout()" class="flex-1 bg-inky text-white font-bold py-3 rounded-xl border-[3px] border-inky btn-pop text-sm">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK VIEW -->
+<div id="qvModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-inky/70 backdrop-blur-sm">
+  <div class="bg-white border-[4px] border-inky rounded-[28px] shadow-pop w-full max-w-lg overflow-hidden">
+    <div id="qvContent"></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="fixed inset-0 z-[200] hidden bg-cream">
+  <div class="h-full flex flex-col md:flex-row">
+    <div class="md:w-64 bg-inky text-white p-4 flex md:flex-col gap-2 overflow-x-auto md:overflow-visible no-scrollbar shrink-0 border-b-[4px] md:border-b-0 md:border-r-[4px] border-inky">
+      <div class="hidden md:flex items-center gap-2 px-2 py-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-berry to-sun flex items-center justify-center text-xl border-2 border-white">⚙️</div><div><div class="font-display font-bold">Admin Panel</div><div class="text-[10px] text-white/50 font-bold">KELOMART v2.0</div></div></div>
+      <button onclick="closeAdmin()" class="md:hidden shrink-0 bg-berry px-4 rounded-xl font-black border-2 border-white">✕</button>
+      <nav class="flex md:flex-col gap-1.5 flex-1 text-sm font-bold whitespace-nowrap" id="adminNav">
+        <button data-tab="dash" onclick="switchAdmin('dash')" class="anav text-left px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20">📊 Dashboard</button>
+        <button data-tab="produk" onclick="switchAdmin('produk')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">📦 Produk</button>
+        <button data-tab="pos" onclick="switchAdmin('pos')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">🧾 POS Kasir</button>
+        <button data-tab="transaksi" onclick="switchAdmin('transaksi')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">🧮 Transaksi</button>
+        <button data-tab="hrd" onclick="switchAdmin('hrd')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">👥 HRD Karyawan</button>
+        <button data-tab="absensi" onclick="switchAdmin('absensi')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">🗓️ Absensi</button>
+        <button data-tab="gaji" onclick="switchAdmin('gaji')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">💵 Gaji</button>
+        <button data-tab="lap" onclick="switchAdmin('lap')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">📈 Laporan</button>
+        <button data-tab="db" onclick="switchAdmin('db')" class="anav text-left px-4 py-2.5 rounded-xl hover:bg-white/10">🗄️ Database</button>
+      </nav>
+      <button onclick="closeAdmin()" class="hidden md:block bg-berry font-bold py-2.5 rounded-xl border-2 border-white/30 hover:bg-red-600 mt-2">✕ Keluar Panel</button>
+    </div>
+    <div class="flex-1 overflow-y-auto">
+      <div class="sticky top-0 z-10 bg-cream/95 backdrop-blur border-b-[3px] border-inky px-4 md:px-8 py-4 flex items-center gap-3">
+        <div><h2 id="adminTitle" class="font-display font-bold text-xl md:text-2xl">📊 Dashboard</h2><p class="text-xs font-bold text-inky/50" id="adminDate">—</p></div>
+        <div class="ml-auto flex items-center gap-2"><span class="hidden md:inline bg-emerald-100 text-emerald-700 border-2 border-emerald-600 text-xs font-black px-3 py-1.5 rounded-full">● MYSQL CONNECTED</span><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-grape to-berry border-[3px] border-inky flex items-center justify-center font-black text-white">A</div></div>
+      </div>
+      <div class="p-4 md:p-8">
+        <!-- DASH -->
+        <div id="tab-dash" class="atab space-y-4">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="bg-gradient-to-br from-berry to-tangerine text-white border-[3px] border-inky rounded-2xl p-4 shadow-pops"><div class="text-xs font-black opacity-80">OMZET HARI INI</div><div id="stOmzet" class="font-display font-bold text-xl md:text-2xl">Rp 0</div><div class="text-xs font-bold">▲ +18% vs kemarin</div></div>
+            <div class="bg-white border-[3px] border-inky rounded-2xl p-4 shadow-pops"><div class="text-xs font-black text-inky/50">TRANSAKSI</div><div id="stTrans" class="font-display font-bold text-xl md:text-2xl">0</div><div class="text-xs font-bold text-mint">● live update</div></div>
+            <div class="bg-white border-[3px] border-inky rounded-2xl p-4 shadow-pops"><div class="text-xs font-black text-inky/50">TOTAL PRODUK</div><div id="stProd" class="font-display font-bold text-xl md:text-2xl">0</div><div class="text-xs font-bold text-tangerine" id="stLow">0 stok menipis</div></div>
+            <div class="bg-inky text-white border-[3px] border-inky rounded-2xl p-4 shadow-pops"><div class="text-xs font-black text-sun">KARYAWAN AKTIF</div><div id="stEmp" class="font-display font-bold text-xl md:text-2xl">0</div><div class="text-xs font-bold text-white/60">HRD terpadu ✓</div></div>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-4">
+            <div class="bg-white border-[3px] border-inky rounded-2xl p-5 shadow-pops"><h3 class="font-display font-semibold">📈 Omzet 7 Hari Terakhir</h3><div class="h-56 mt-2"><canvas id="chSales"></canvas></div></div>
+            <div class="bg-white border-[3px] border-inky rounded-2xl p-5 shadow-pops"><h3 class="font-display font-semibold">🍩 Penjualan per Kategori</h3><div class="h-56 mt-2 flex justify-center"><canvas id="chCat"></canvas></div></div>
+          </div>
+          <div class="bg-white border-[3px] border-inky rounded-2xl p-5 shadow-pops"><h3 class="font-display font-semibold">⚠️ Stok Menipis (≤10)</h3><div id="lowStock" class="mt-3 grid md:grid-cols-3 gap-2"></div></div>
+        </div>
+        <!-- PRODUK -->
+        <div id="tab-produk" class="atab hidden space-y-4">
+          <div class="flex flex-wrap gap-2 justify-between items-center"><h3 class="font-display font-semibold text-xl">📦 Kelola Produk <span class="text-sm font-body text-inky/50">(tabel: produk)</span></h3><button onclick="productForm()" class="bg-berry text-white font-bold px-5 py-2.5 rounded-xl border-[3px] border-inky btn-pop text-sm">+ Tambah Produk</button></div>
+          <div class="bg-white border-[3px] border-inky rounded-2xl overflow-hidden shadow-pops"><div class="overflow-x-auto"><table class="w-full text-sm font-semibold min-w-[720px]"><thead><tr class="bg-inky text-white text-left text-xs"><th class="p-3">PRODUK</th><th class="p-3">KATEGORI</th><th class="p-3">HARGA</th><th class="p-3">STOK</th><th class="p-3">TERJUAL</th><th class="p-3">AKSI</th></tr></thead><tbody id="prodTable"></tbody></table></div></div>
+        </div>
+        <!-- POS -->
+        <div id="tab-pos" class="atab hidden">
+          <div class="grid lg:grid-cols-[1fr_340px] gap-4">
+            <div><input id="posSearch" oninput="renderPOS()" placeholder="🔍 Cari / scan barcode produk..." class="w-full border-[3px] border-inky rounded-2xl px-4 py-3 font-bold bg-white"><div id="posGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3"></div></div>
+            <div class="bg-inky text-white rounded-2xl border-[3px] border-inky p-4 h-fit lg:sticky lg:top-20">
+              <h3 class="font-display font-semibold text-lg">🧾 Struk Aktif <span id="posNum" class="text-sun text-sm">#1025</span></h3>
+              <div id="posItems" class="mt-3 space-y-2 max-h-64 overflow-y-auto"></div>
+              <div class="border-t border-white/20 mt-3 pt-3 space-y-1 text-sm font-bold"><div class="flex justify-between"><span class="text-white/60">Total</span><span id="posTotal" class="text-sun font-display text-xl">Rp 0</span></div></div>
+              <label class="text-xs font-black text-white/50 mt-3 block">UANG DITERIMA</label>
+              <input id="posCash" type="number" oninput="calcPOS()" placeholder="cth: 100000" class="w-full mt-1 bg-white/10 border-2 border-white/30 rounded-xl px-3 py-2.5 font-bold text-white placeholder:text-white/30">
+              <div class="flex gap-2 mt-2"><button onclick="posQuick(50000)" class="flex-1 bg-white/10 border border-white/30 rounded-lg py-1.5 text-xs font-black">50rb</button><button onclick="posQuick(100000)" class="flex-1 bg-white/10 border border-white/30 rounded-lg py-1.5 text-xs font-black">100rb</button><button onclick="posUangPas()" class="flex-1 bg-sun text-inky rounded-lg py-1.5 text-xs font-black">UANG PAS</button></div>
+              <div class="flex justify-between mt-2 text-sm font-bold"><span class="text-white/60">Kembalian</span><span id="posChange" class="text-mint">Rp 0</span></div>
+              <button onclick="bayarPOS()" class="w-full mt-3 bg-gradient-to-r from-mint to-ocean text-inky font-display font-semibold py-3 rounded-xl">💰 BAYAR & CETAK</button>
+            </div>
+          </div>
+        </div>
+        <!-- TRANSAKSI -->
+        <div id="tab-transaksi" class="atab hidden space-y-4">
+          <div class="flex flex-wrap gap-2 justify-between items-center"><h3 class="font-display font-semibold text-xl">🧮 Riwayat Transaksi</h3><button onclick="exportCSV()" class="bg-mint font-bold px-5 py-2.5 rounded-xl border-[3px] border-inky btn-pop text-sm">⬇ Export CSV</button></div>
+          <div id="txList" class="space-y-2"></div>
+        </div>
+        <!-- HRD -->
+        <div id="tab-hrd" class="atab hidden space-y-4">
+          <div class="flex flex-wrap gap-2 justify-between items-center"><h3 class="font-display font-semibold text-xl">👥 Data Karyawan <span class="text-sm font-body text-inky/50">(tabel: karyawan)</span></h3><button onclick="empForm()" class="bg-grape text-white font-bold px-5 py-2.5 rounded-xl border-[3px] border-inky btn-pop text-sm">+ Tambah Karyawan</button></div>
+          <div id="empGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+        <!-- ABSENSI -->
+        <div id="tab-absensi" class="atab hidden space-y-4">
+          <div class="flex flex-wrap gap-2 justify-between items-center"><h3 class="font-display font-semibold text-xl">🗓️ Absensi Harian <span class="text-sm font-body text-inky/50">(tabel: absensi)</span></h3><button onclick="resetAbsen()" class="bg-white font-bold px-5 py-2.5 rounded-xl border-[3px] border-inky btn-pop text-sm">↻ Reset Hari Ini</button></div>
+          <div id="absenList" class="grid md:grid-cols-2 gap-3"></div>
+        </div>
+        <!-- GAJI -->
+        <div id="tab-gaji" class="atab hidden space-y-4">
+          <h3 class="font-display font-semibold text-xl">💵 Penggajian & Slip Gaji <span class="text-sm font-body text-inky/50">(tabel: penggajian)</span></h3>
+          <div class="bg-inky text-white rounded-2xl border-[3px] border-inky p-5 grid md:grid-cols-3 gap-3 text-center"><div><div class="text-xs font-black text-white/50">PERIODE</div><div class="font-display font-bold text-xl text-sun">Oktober 2026</div></div><div><div class="text-xs font-black text-white/50">TOTAL PAYROLL</div><div id="payTotal" class="font-display font-bold text-xl text-mint">Rp 0</div></div><div><div class="text-xs font-black text-white/50">STATUS</div><div class="font-display font-bold text-xl">✅ Siap Dibayar</div></div></div>
+          <div class="bg-white border-[3px] border-inky rounded-2xl overflow-hidden shadow-pops"><div class="overflow-x-auto"><table class="w-full text-sm font-semibold min-w-[700px]"><thead><tr class="bg-gradient-to-r from-grape to-berry text-white text-left text-xs"><th class="p-3">KARYAWAN</th><th class="p-3">POKOK</th><th class="p-3">TUNJANGAN</th><th class="p-3">BONUS</th><th class="p-3">TOTAL</th><th class="p-3">SLIP</th></tr></thead><tbody id="gajiTable"></tbody></table></div></div>
+        </div>
+        <!-- LAPORAN -->
+        <div id="tab-lap" class="atab hidden space-y-4">
+          <h3 class="font-display font-semibold text-xl">📈 Laporan Penjualan</h3>
+          <div class="grid lg:grid-cols-2 gap-4">
+            <div class="bg-white border-[3px] border-inky rounded-2xl p-5 shadow-pops"><h4 class="font-bold">💳 Metode Pembayaran</h4><div class="h-56 mt-2"><canvas id="chPay"></canvas></div></div>
+            <div class="bg-white border-[3px] border-inky rounded-2xl p-5 shadow-pops"><h4 class="font-bold">🏆 Produk Terlaris</h4><div id="topProd" class="mt-3 space-y-2"></div></div>
+          </div>
+          <div class="bg-white border-[3px] border-inky rounded-2xl p-5 shadow-pops"><h4 class="font-bold">📊 Ringkasan</h4><div id="lapSummary" class="grid md:grid-cols-4 gap-3 mt-3"></div></div>
+        </div>
+        <!-- DB -->
+        <div id="tab-db" class="atab hidden space-y-4">
+          <h3 class="font-display font-semibold text-xl">🗄️ Database MySQL</h3>
+          <div class="bg-inky text-white rounded-2xl border-[3px] border-inky p-5">
+            <div class="flex items-center gap-2 text-sm font-bold"><span class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></span> Server: localhost • Database: <span class="text-sun">toko_kelontong</span> • 9 tabel • utf8mb4</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-4 text-xs font-mono" id="dbTables"></div>
+            <div class="flex flex-wrap gap-2 mt-4"><button onclick="setFile('database/toko_kelontong.sql');closeAdmin();document.getElementById('backend').scrollIntoView({behavior:'smooth'})" class="bg-sun text-inky font-bold px-4 py-2 rounded-xl text-sm">📄 Lihat SQL Lengkap</button><button onclick="downloadSQL()" class="bg-mint text-inky font-bold px-4 py-2 rounded-xl text-sm">⬇ Download .sql</button><button onclick="if(confirm('Reset semua data demo?')){localStorage.clear();location.reload()}" class="bg-berry font-bold px-4 py-2 rounded-xl text-sm">↻ Reset Demo</button></div>
+          </div>
+          <div class="bg-sun/30 border-[3px] border-inky rounded-2xl p-5 text-sm font-semibold"><b>💡 Catatan Developer:</b> Demo ini memakai <b>LocalStorage</b> sebagai simulasi MySQL agar bisa jalan tanpa server. Untuk produksi, gunakan file <b>config/koneksi.php</b> + <b>database/toko_kelontong.sql</b> di section PHP & MySQL, lalu ganti fungsi JS dengan fetch ke API PHP (<b>api/api_produk.php</b>).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM MODAL (produk/karyawan) -->
+<div id="formModal" class="fixed inset-0 z-[210] hidden items-center justify-center p-4 bg-inky/70 backdrop-blur-sm">
+  <div class="bg-white border-[4px] border-inky rounded-3xl shadow-pop w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><div id="formContent"></div></div>
+</div>
+
+<script>
+/* ============ DATA ============ */
+const CATS = ["Semua","Sembako","Mie & Pasta","Minuman","Snack","Bumbu Dapur","Kebersihan"];
+const CAT_ICON = {"Semua":"🛒","Sembako":"🍚","Mie & Pasta":"🍜","Minuman":"🥤","Snack":"🍪","Bumbu Dapur":"🧂","Kebersihan":"🧼"};
+const CAT_COLOR = {"Sembako":"bg-tangerine","Mie & Pasta":"bg-berry text-white","Minuman":"bg-ocean","Snack":"bg-grape text-white","Bumbu Dapur":"bg-sun","Kebersihan":"bg-mint"};
+
+const DEFAULT_PRODUCTS = [
+ {id:1,nama:"Beras Premium Cap Topi 5kg",kat:"Sembako",harga:68000,coret:82000,stok:45,rating:4.9,terjual:1240,img:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80",badge:"Best Seller",desc:"Beras pulen premium, butir utuh, aroma wangi. Favorit ibu-ibu sekomplek!"},
+ {id:2,nama:"Minyak Goreng Tropical 2L",kat:"Sembako",harga:42500,coret:51000,stok:60,rating:4.8,terjual:980,img:"https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80",badge:"Promo",desc:"Minyak jernih 2x penyaringan, hemat & tidak cepat hitam."},
+ {id:3,nama:"Gula Pasir Gulaku 1kg",kat:"Sembako",harga:17500,coret:19500,stok:80,rating:4.9,terjual:1500,img:"https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=400&q=80",badge:"",desc:"Gula tebu murni, manis pas untuk teh & kopi."},
+ {id:4,nama:"Telur Ayam Negeri 1kg (±16 butir)",kat:"Sembako",harga:28000,coret:0,stok:30,rating:4.7,terjual:760,img:"https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80",badge:"Segar",desc:"Telur fresh dari peternakan langsung, cangkang tebal."},
+ {id:5,nama:"Indomie Goreng Spesial (5 pcs)",kat:"Mie & Pasta",harga:17500,coret:20000,stok:120,rating:5.0,terjual:3200,img:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&q=80",badge:"Best Seller",desc:"Siapa yang bisa nolak? Stok wajib anak kos!"},
+ {id:6,nama:"Kopi Kapal Api Special 165g",kat:"Minuman",harga:24000,coret:0,stok:55,rating:4.8,terjual:890,img:"https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&q=80",badge:"",desc:"Kopi tubruk legendaris, mantap untuk begadang."},
+ {id:7,nama:"Teh Sariwangi 100's",kat:"Minuman",harga:22500,coret:25000,stok:40,rating:4.7,terjual:540,img:"https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?w=400&q=80",badge:"",desc:"Teh melati wangi, isi 100 kantong hemat."},
+ {id:8,nama:"Susu UHT Ultra Milk 1L",kat:"Minuman",harga:19500,coret:0,stok:48,rating:4.9,terjual:670,img:"https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&q=80",badge:"",desc:"Susu sapi murni, tersedia full cream & coklat."},
+ {id:9,nama:"Tepung Segitiga Biru 1kg",kat:"Sembako",harga:14500,coret:0,stok:35,rating:4.8,terjual:430,img:"https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&q=80",badge:"",desc:"Tepung protein sedang, andalan baking & gorengan."},
+ {id:10,nama:"Kecap Manis Bango 620ml",kat:"Bumbu Dapur",harga:26500,coret:29000,stok:50,rating:4.9,terjual:720,img:"https://images.unsplash.com/photo-1615486363973-f79eea875133?w=400&q=80",badge:"",desc:"Kecap kental manis gurih dari kedelai hitam."},
+ {id:11,nama:"Chitato Sapi Panggang 68g",kat:"Snack",harga:11500,coret:0,stok:90,rating:4.8,terjual:1100,img:"https://images.unsplash.com/photo-1566478989037-eec170816d0b?w=400&q=80",badge:"Baru",desc:"Chips kentang renyah, bumbu sapi panggang nampol."},
+ {id:12,nama:"Aqua Galon 19L + Isi Ulang",kat:"Minuman",harga:22000,coret:0,stok:25,rating:4.9,terjual:890,img:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&q=80",badge:"",desc:"Air mineral galon, antar gratis se-komplek."},
+ {id:13,nama:"Sabun Lifebuoy 110g (3 pcs)",kat:"Kebersihan",harga:16500,coret:19000,stok:70,rating:4.7,terjual:510,img:"https://images.unsplash.com/photo-1584305574647-0cc949a2bb9f?w=400&q=80",badge:"Hemat",desc:"Sabun antibakteri, paket hemat isi 3."},
+ {id:14,nama:"Rinso Anti Noda 1.8kg",kat:"Kebersihan",harga:48500,coret:55000,stok:28,rating:4.8,terjual:390,img:"https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&q=80",badge:"Promo",desc:"Deterjen bubuk, noda membandel rontok."},
+ {id:15,nama:"Shampo Clear 400ml",kat:"Kebersihan",harga:52000,coret:61000,stok:22,rating:4.8,terjual:340,img:"https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80",badge:"",desc:"Anti ketombe dengan menthol segar."},
+ {id:16,nama:"Kopiko Candy 350g",kat:"Snack",harga:21000,coret:0,stok:65,rating:4.9,terjual:820,img:"https://images.unsplash.com/photo-1582058099227-88af2291c2b8?w=400&q=80",badge:"",desc:"Permen kopi asli, teman lembur paling setia."}
+];
+
+const DEFAULT_EMP = [
+ {id:"KRY-001",nama:"Budi Santoso",jabatan:"Manager Toko",gaji:6500000,tunj:1500000,bonus:500000,hp:"0812-1111-0001",status:"Aktif",masuk:"2019-03-01",img:"https://i.pravatar.cc/120?img=11"},
+ {id:"KRY-002",nama:"Siti Aminah",jabatan:"Kasir Shift 1",gaji:3500000,tunj:500000,bonus:300000,hp:"0812-1111-0002",status:"Aktif",masuk:"2021-07-15",img:"https://i.pravatar.cc/120?img=47"},
+ {id:"KRY-003",nama:"Andi Pratama",jabatan:"Pramuniaga",gaji:3200000,tunj:400000,bonus:250000,hp:"0812-1111-0003",status:"Aktif",masuk:"2022-01-10",img:"https://i.pravatar.cc/120?img=13"},
+ {id:"KRY-004",nama:"Dewi Lestari",jabatan:"Admin Gudang",gaji:3800000,tunj:600000,bonus:350000,hp:"0812-1111-0004",status:"Aktif",masuk:"2020-11-20",img:"https://i.pravatar.cc/120?img=32"},
+ {id:"KRY-005",nama:"Joko Rudianto",jabatan:"Kurir Antar",gaji:3000000,tunj:700000,bonus:400000,hp:"0812-1111-0005",status:"Aktif",masuk:"2023-02-01",img:"https://i.pravatar.cc/120?img=59"},
+ {id:"KRY-006",nama:"Rina Wulandari",jabatan:"Kasir Shift 2",gaji:3400000,tunj:500000,bonus:300000,hp:"0812-1111-0006",status:"Cuti",masuk:"2022-09-05",img:"https://i.pravatar.cc/120?img=44"}
+];
+
+let products = JSON.parse(localStorage.getItem('km_products') || 'null') || JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+let cart = JSON.parse(localStorage.getItem('km_cart') || '[]');
+let employees = JSON.parse(localStorage.getItem('km_emp') || 'null') || JSON.parse(JSON.stringify(DEFAULT_EMP));
+let transactions = JSON.parse(localStorage.getItem('km_tx') || 'null') || seedTx();
+let attendance = JSON.parse(localStorage.getItem('km_absen') || 'null') || seedAbsen();
+let posCart = {};
+let activeCat = "Semua", promo = null, payMethod = "QRIS", lastReceipt = null, qvQty = 1, qvId = null;
+
+function seedTx(){
+  const m=["QRIS","COD","Transfer","Tunai di Toko"]; const out=[]; const now=Date.now();
+  for(let i=0;i<14;i++){ const n=2+Math.floor(Math.random()*4); let items=[],total=0;
+    for(let j=0;j<n;j++){const p=DEFAULT_PRODUCTS[Math.floor(Math.random()*DEFAULT_PRODUCTS.length)]; const q=1+Math.floor(Math.random()*3); items.push({id:p.id,nama:p.nama,harga:p.harga,qty:q}); total+=p.harga*q;}
+    out.push({id:"TRX-"+(1010+i),tgl:new Date(now-i*86400000*Math.random()).toISOString(),nama:["Andi","Siti","Budi","Rina","Dewi","Agus","Putri"][i%7],items,total,metode:m[i%4],kasir:"Siti Aminah"});
+  }
+  return out;
+}
+function seedAbsen(){ const o={}; employees.forEach((e,i)=>{ o[e.id]={status: e.status==="Cuti"?"Cuti":(i===2?"Terlambat":"Hadir"),masuk: e.status==="Cuti"?"-":(i===2?"08:25":"07:55"),pulang:"-"}; }); return o; }
+function save(){ localStorage.setItem('km_products',JSON.stringify(products)); localStorage.setItem('km_cart',JSON.stringify(cart)); localStorage.setItem('km_emp',JSON.stringify(employees)); localStorage.setItem('km_tx',JSON.stringify(transactions)); localStorage.setItem('km_absen',JSON.stringify(attendance)); }
+const rp = n => "Rp " + Number(n||0).toLocaleString('id-ID');
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ============ TOAST ============ */
+function toast(msg, icon="✅", color="bg-inky"){
+  const t=document.createElement('div');
+  t.className=`${color} text-white font-bold text-sm px-5 py-3 rounded-2xl border-[3px] border-inky shadow-pop flex items-center gap-2 max-w-xs`;
+  t.style.animation="bounceSoft .4s"; t.innerHTML=`<span class="text-lg">${icon}</span> ${msg}`;
+  document.getElementById('toastWrap').appendChild(t);
+  setTimeout(()=>{t.style.opacity="0";t.style.transform="translateX(40px)";t.style.transition=".4s";setTimeout(()=>t.remove(),400)},2600);
+}
+
+/* ============ PRODUK ============ */
+function renderCats(){
+  document.getElementById('catChips').innerHTML = CATS.map(c=>
+    `<button onclick="setCat('${c}')" class="shrink-0 font-bold text-sm px-5 py-2.5 rounded-xl border-[3px] border-inky transition btn-pop ${activeCat===c?'bg-inky text-white shadow-pop':'bg-white shadow-pops'}">${CAT_ICON[c]} ${c}</button>`).join('');
+}
+function setCat(c){activeCat=c;renderCats();renderProducts();}
+function heroGo(){const v=document.getElementById('heroSearch').value;document.getElementById('searchInput').value=v;renderProducts();document.getElementById('katalog').scrollIntoView({behavior:'smooth'});}
+function renderProducts(){
+  const q=(document.getElementById('searchInput').value||"").toLowerCase();
+  const sort=document.getElementById('sortSelect').value;
+  let list=products.filter(p=>(activeCat==="Semua"||p.kat===activeCat)&&p.nama.toLowerCase().includes(q));
+  if(sort==="low")list.sort((a,b)=>a.harga-b.harga); else if(sort==="high")list.sort((a,b)=>b.harga-a.harga);
+  else if(sort==="az")list.sort((a,b)=>a.nama.localeCompare(b.nama)); else list.sort((a,b)=>b.terjual-a.terjual);
+  document.getElementById('prodTotalLabel').textContent=list.length;
+  const grid=document.getElementById('productGrid');
+  if(!list.length){grid.innerHTML=`<div class="col-span-full text-center py-14 bg-white border-[3px] border-dashed border-inky/30 rounded-3xl"><div class="text-6xl">🔍</div><div class="font-display font-semibold text-xl mt-2">Yah, produk tidak ketemu...</div><p class="text-sm text-inky/50 font-semibold">Coba kata kunci lain ya!</p></div>`;return;}
+  grid.innerHTML=list.map((p,i)=>{
+    const pct=Math.min(100,Math.round(p.stok/60*100));
+    const col=p.stok<=10?'bg-berry':p.stok<=25?'bg-tangerine':'bg-mint';
+    return `<div class="bg-white border-[3px] border-inky rounded-3xl overflow-hidden shadow-pops card-lift flex flex-col" style="transform:rotate(${(i%2?1:-1)*0.6}deg)">
+      <div class="relative cursor-pointer" onclick="quickView(${p.id})">
+        <img src="${p.img}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/km${p.id}/400/300'" class="w-full h-36 md:h-44 object-cover" loading="lazy" alt="${esc(p.nama)}">
+        ${p.badge?`<span class="absolute top-2 left-2 bg-berry text-white text-[10px] font-black px-2.5 py-1 rounded-full border-2 border-inky rotate-[-4deg]">${p.badge}</span>`:""}
+        ${p.coret?`<span class="absolute top-2 right-2 bg-sun text-inky text-[10px] font-black px-2.5 py-1 rounded-full border-2 border-inky">-${Math.round((1-p.harga/p.coret)*100)}%</span>`:""}
+        <span class="absolute bottom-2 left-2 ${CAT_COLOR[p.kat]||'bg-cream'} text-[10px] font-black px-2 py-0.5 rounded-full border-2 border-inky">${p.kat}</span>
+      </div>
+      <div class="p-3 md:p-4 flex-1 flex flex-col">
+        <div class="text-[11px] font-bold text-tangerine">★ ${p.rating} <span class="text-inky/40">• Terjual ${p.terjual>=1000?(p.terjual/1000).toFixed(1)+'rb':p.terjual}</span></div>
+        <h3 class="font-bold text-sm md:text-[15px] leading-snug mt-0.5 line-clamp-2 cursor-pointer hover:text-berry" onclick="quickView(${p.id})">${esc(p.nama)}</h3>
+        <div class="mt-1.5">${p.coret?`<span class="text-xs line-through text-gray-400 font-bold">${rp(p.coret)}</span>`:""}<div class="font-display font-bold text-lg md:text-xl text-berry">${rp(p.harga)}</div></div>
+        <div class="mt-1.5"><div class="flex justify-between text-[10px] font-black text-inky/50"><span>STOK: ${p.stok}</span><span>${p.stok<=10?'⚠️ Menipis!':'✅ Ready'}</span></div><div class="stock-bar mt-1"><div class="stock-fill ${col}" style="width:${pct}%"></div></div></div>
+        <div class="flex gap-2 mt-3">
+          <div class="flex items-center border-[3px] border-inky rounded-xl overflow-hidden text-sm font-black"><button onclick="stepQty(${p.id},-1,this)" class="px-2.5 py-1.5 bg-cream hover:bg-sun">−</button><span class="px-2 qty-disp" data-id="${p.id}">1</span><button onclick="stepQty(${p.id},1,this)" class="px-2.5 py-1.5 bg-cream hover:bg-sun">+</button></div>
+          <button onclick="addToCart(${p.id},this)" class="flex-1 bg-inky text-white text-xs md:text-sm font-bold rounded-xl border-[3px] border-inky btn-pop">🛒 +</button>
+        </div>
+      </div></div>`;
+  }).join('');
+}
+function stepQty(id,d,btn){const el=btn.parentElement.querySelector('.qty-disp');let v=parseInt(el.textContent)+d;v=Math.max(1,Math.min(99,v));el.textContent=v;}
+function addToCart(id,btn){const card=btn.closest('div.flex');let q=1;const d=card?card.querySelector('.qty-disp'):null;if(d)q=parseInt(d.textContent);const p=products.find(x=>x.id===id);if(!p||p.stok<=0)return toast('Stok habis!','😭','bg-berry');const ex=cart.find(c=>c.id===id);if(ex){if(ex.qty+q>p.stok)return toast('Stok tidak cukup!','⚠️','bg-tangerine');ex.qty+=q;}else cart.push({id:p.id,nama:p.nama,harga:p.harga,img:p.img,qty:Math.min(q,p.stok)});save();updateCartUI();toast(`${p.nama} masuk keranjang!`,'🛒','bg-mint');confetti({particleCount:25,spread:60,origin:{y:.8},colors:['#FF2E63','#FFC300','#2EC4B6']});}
+function quickAdd(id){const p=products.find(x=>x.id===id);const ex=cart.find(c=>c.id===id);if(ex)ex.qty++;else cart.push({id:p.id,nama:p.nama,harga:p.harga,img:p.img,qty:1});save();updateCartUI();toast('Ditambahkan!','⚡','bg-berry');}
+function quickView(id){
+  const p=products.find(x=>x.id===id);if(!p)return;qvId=id;qvQty=1;
+  document.getElementById('qvContent').innerHTML=`
+    <div class="relative"><img src="${p.img}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/km${p.id}/600/400'" class="w-full h-56 object-cover">
+    <button onclick="closeQV()" class="absolute top-3 right-3 w-10 h-10 bg-white rounded-xl border-[3px] border-inky font-black btn-pop">✕</button>
+    ${p.badge?`<span class="absolute top-3 left-3 bg-berry text-white text-xs font-black px-3 py-1.5 rounded-full border-2 border-inky">${p.badge}</span>`:""}</div>
+    <div class="p-6"><span class="${CAT_COLOR[p.kat]} text-xs font-black px-3 py-1 rounded-full border-2 border-inky">${CAT_ICON[p.kat]} ${p.kat}</span>
+    <h3 class="font-display font-bold text-2xl mt-2">${esc(p.nama)}</h3>
+    <div class="text-sm font-bold text-tangerine mt-1">★ ${p.rating} • Terjual ${p.terjual.toLocaleString('id-ID')} • Stok ${p.stok}</div>
+    <p class="text-sm text-inky/60 font-medium mt-2">${esc(p.desc||'Produk original berkualitas.')}</p>
+    <div class="flex items-end gap-2 mt-3">${p.coret?`<span class="line-through text-gray-400 font-bold">${rp(p.coret)}</span>`:""}<span class="font-display font-bold text-3xl text-berry">${rp(p.harga)}</span></div>
+    <div class="flex gap-3 mt-4"><div class="flex items-center border-[3px] border-inky rounded-2xl overflow-hidden font-black text-lg"><button onclick="qvStep(-1)" class="px-4 py-2 bg-cream">−</button><span id="qvQ" class="px-4">1</span><button onclick="qvStep(1)" class="px-4 py-2 bg-cream">+</button></div>
+    <button onclick="qvAdd()" class="flex-1 bg-gradient-to-r from-berry to-tangerine text-white font-display font-semibold py-3 rounded-2xl border-[3px] border-inky shadow-pop btn-pop">🛒 Keranjang</button></div></div>`;
+  const m=document.getElementById('qvModal');m.classList.remove('hidden');m.classList.add('flex');
+}
+function qvStep(d){qvQty=Math.max(1,qvQty+d);document.getElementById('qvQ').textContent=qvQty;}
+function qvAdd(){const p=products.find(x=>x.id===qvId);const ex=cart.find(c=>c.id===qvId);if(ex)ex.qty=Math.min(p.stok,ex.qty+qvQty);else cart.push({id:p.id,nama:p.nama,harga:p.harga,img:p.img,qty:Math.min(qvQty,p.stok)});save();updateCartUI();closeQV();toggleCart(true);}
+function closeQV(){const m=document.getElementById('qvModal');m.classList.add('hidden');m.classList.remove('flex');}
+
+/* ============ CART ============ */
+function toggleCart(open){const d=document.getElementById('cartDrawer'),o=document.getElementById('cartOverlay');if(open){d.classList.remove('translate-x-full');o.classList.remove('hidden');}else{d.classList.add('translate-x-full');o.classList.add('hidden');}}
+function cartCalc(){const sub=cart.reduce((s,c)=>s+c.harga*c.qty,0);let disc=0,ship=cart.length?8000:0;
+  if(promo==="CERIA10"){disc=Math.round(sub*0.10);ship=0;}else if(promo==="HEMAT20"){disc=Math.min(20000,sub);}else if(promo==="GRATISONGKIR"){ship=0;}
+  if(sub-disc>=100000)ship=0;return{sub,disc,ship,total:Math.max(0,sub-disc+ship)};}
+function updateCartUI(){
+  const n=cart.reduce((s,c)=>s+c.qty,0);document.getElementById('cartCount').textContent=n;document.getElementById('cartSubLabel').textContent=n+" barang";
+  const w=document.getElementById('cartItems');
+  if(!cart.length){w.innerHTML=`<div class="text-center py-16"><div class="text-7xl">🛒</div><div class="font-display font-semibold text-xl mt-3">Keranjang masih kosong</div><p class="text-sm text-inky/50 font-semibold">Yuk jajan sembako dulu!</p><button onclick="toggleCart(false);document.getElementById('katalog').scrollIntoView({behavior:'smooth'})" class="mt-4 bg-berry text-white font-bold px-6 py-2.5 rounded-xl border-[3px] border-inky btn-pop text-sm">Belanja Yuk →</button></div>`;}
+  else w.innerHTML=cart.map(c=>`<div class="bg-white border-[3px] border-inky rounded-2xl p-3 flex gap-3 shadow-pops">
+    <img src="${c.img}" onerror="this.src='https://picsum.photos/seed/km${c.id}/100/100'" class="w-16 h-16 rounded-xl object-cover border-2 border-inky">
+    <div class="flex-1 min-w-0"><div class="font-bold text-sm truncate">${esc(c.nama)}</div><div class="text-xs font-bold text-berry">${rp(c.harga)}</div>
+    <div class="flex items-center gap-2 mt-1.5"><div class="flex items-center border-2 border-inky rounded-lg overflow-hidden text-xs font-black"><button onclick="chQty(${c.id},-1)" class="px-2 py-1 bg-cream">−</button><span class="px-2">${c.qty}</span><button onclick="chQty(${c.id},1)" class="px-2 py-1 bg-cream">+</button></div><span class="text-xs font-black ml-auto">${rp(c.harga*c.qty)}</span></div></div>
+    <button onclick="rmCart(${c.id})" class="text-berry font-black self-start">🗑️</button></div>`).join('');
+  const{sub,disc,ship,total}=cartCalc();
+  document.getElementById('ctSub').textContent=rp(sub);document.getElementById('ctDisc').textContent="-"+rp(disc);
+  document.getElementById('ctShip').textContent=ship===0?"GRATIS 🎉":rp(ship);document.getElementById('ctTotal').textContent=rp(total);
+}
+function chQty(id,d){const it=cart.find(c=>c.id===id);const p=products.find(x=>x.id===id);it.qty+=d;if(it.qty<=0)cart=cart.filter(c=>c.id!==id);if(p&&it.qty>p.stok){it.qty=p.stok;toast('Stok maksimal!','⚠️','bg-tangerine');}save();updateCartUI();}
+function rmCart(id){cart=cart.filter(c=>c.id!==id);save();updateCartUI();}
+function applyPromo(){const v=document.getElementById('promoInput').value.trim().toUpperCase();if(["CERIA10","HEMAT20","GRATISONGKIR"].includes(v)){promo=v;updateCartUI();toast(`Promo ${v} aktif! 🎉`,'🏷️','bg-grape');}else toast('Kode promo tidak valid','😅','bg-berry');}
+function usePromo(c){document.getElementById('promoInput').value=c;promo=c;updateCartUI();toggleCart(true);toast(`Promo ${c} dipakai!`,'🏷️','bg-grape');}
+
+/* ============ CHECKOUT ============ */
+function openCheckout(){if(!cart.length)return toast('Keranjang kosong!','🛒','bg-berry');document.getElementById('checkoutForm').classList.remove('hidden');document.getElementById('receiptWrap').classList.add('hidden');updSummary();const m=document.getElementById('checkoutModal');m.classList.remove('hidden');m.classList.add('flex');}
+function closeCheckout(){const m=document.getElementById('checkoutModal');m.classList.add('hidden');m.classList.remove('flex');}
+function setPay(m,btn){payMethod=m;document.querySelectorAll('.pay-btn').forEach(b=>b.classList.remove('tab-active'));btn.classList.add('tab-active');updSummary();}
+function updSummary(){const{sub,disc,ship,total}=cartCalc();document.getElementById('checkoutSummary').innerHTML=`<div class="text-xs text-inky/50 font-black mb-1">RINGKASAN • ${cart.length} ITEM • ${payMethod}</div>${cart.map(c=>`<div class="flex justify-between text-xs py-0.5"><span>${esc(c.nama)} ×${c.qty}</span><span>${rp(c.harga*c.qty)}</span></div>`).join('')}<div class="border-t-2 border-dashed mt-1 pt-1 flex justify-between font-display text-base"><span>TOTAL</span><span class="text-berry">${rp(total)}</span></div>`;}
+function processCheckout(){
+  const nama=document.getElementById('coName').value.trim(),hp=document.getElementById('coPhone').value.trim(),addr=document.getElementById('coAddr').value.trim();
+  if(!nama||!hp||!addr)return toast('Lengkapi nama, HP & alamat!','⚠️','bg-tangerine');
+  const{sub,disc,ship,total}=cartCalc();
+  const tx={id:"TRX-"+(1025+transactions.length),tgl:new Date().toISOString(),nama,hp,addr,note:document.getElementById('coNote').value,items:cart.map(c=>({...c})),sub,disc,ship,total,metode:payMethod,kasir:"Online"};
+  transactions.unshift(tx);
+  cart.forEach(c=>{const p=products.find(x=>x.id===c.id);if(p){p.stok=Math.max(0,p.stok-c.qty);p.terjual+=c.qty;}});
+  lastReceipt=tx;cart=[];promo=null;save();updateCartUI();renderProducts();
+  document.getElementById('rcMeta').innerHTML=`No: ${tx.id} • ${new Date().toLocaleString('id-ID')}<br>${esc(nama)} • ${payMethod}`;
+  document.getElementById('rcItems').innerHTML=tx.items.map(i=>`<div class="flex justify-between"><span>${esc(i.nama)} ×${i.qty}</span><span>${rp(i.harga*i.qty)}</span></div>`).join('');
+  document.getElementById('rcTotal').innerHTML=`<div class="flex justify-between"><span>Subtotal</span><span>${rp(sub)}</span></div><div class="flex justify-between"><span>Diskon</span><span>-${rp(disc)}</span></div><div class="flex justify-between"><span>Ongkir</span><span>${ship===0?'GRATIS':rp(ship)}</span></div><div class="flex justify-between font-black text-sm"><span>TOTAL</span><span class="text-berry">${rp(total)}</span></div>`;
+  document.getElementById('checkoutForm').classList.add('hidden');document.getElementById('receiptWrap').classList.remove('hidden');
+  confetti({particleCount:150,spread:100,origin:{y:.6},colors:['#FF2E63','#FFC300','#2EC4B6','#845EC2']});
+  setTimeout(()=>confetti({particleCount:80,angle:60,spread:60,origin:{x:0}}),300);setTimeout(()=>confetti({particleCount:80,angle:120,spread:60,origin:{x:1}}),500);
+  toast('Pesanan berhasil dibuat!','🎉','bg-mint');
+}
+function waReceipt(){if(!lastReceipt)return;const t=lastReceipt;const msg=`Halo KeloMart! 🛒%0APesanan ${t.id}%0A%0A${t.items.map(i=>`• ${i.nama} x${i.qty} = Rp ${(i.harga*i.qty).toLocaleString('id-ID')}`).join('%0A')}%0A%0ATOTAL: Rp ${t.total.toLocaleString('id-ID')} (${t.metode})%0ANama: ${t.nama}%0AAlamat: ${t.addr}`;window.open('https://wa.me/6281288888888?text='+msg,'_blank');}
+function subscribe(){const v=document.getElementById('nlInput').value;if(!v||!v.includes('@'))return toast('Masukkan email valid!','📧','bg-berry');document.getElementById('nlInput').value="";toast('Berhasil langganan promo!','📬','bg-mint');confetti({particleCount:60,spread:70});}
+
+/* ============ ADMIN ============ */
+let charts={};
+function openAdmin(tab='dash'){document.getElementById('adminPanel').classList.remove('hidden');document.body.style.overflow='hidden';document.getElementById('adminDate').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});switchAdmin(tab);}
+function closeAdmin(){document.getElementById('adminPanel').classList.add('hidden');document.body.style.overflow='';renderProducts();renderHRDPreview();}
+function switchAdmin(tab){
+  document.querySelectorAll('.atab').forEach(e=>e.classList.add('hidden'));document.getElementById('tab-'+tab).classList.remove('hidden');
+  document.querySelectorAll('.anav').forEach(b=>b.classList.remove('bg-sun','!text-inky'));
+  const btn=document.querySelector(`[data-tab="${tab}"]`);if(btn)btn.classList.add('bg-sun','!text-inky');
+  const titles={dash:'📊 Dashboard',produk:'📦 Kelola Produk',pos:'🧾 POS Kasir',transaksi:'🧮 Transaksi',hrd:'👥 HRD Karyawan',absensi:'🗓️ Absensi',gaji:'💵 Penggajian',lap:'📈 Laporan',db:'🗄️ Database'};
+  document.getElementById('adminTitle').textContent=titles[tab];
+  if(tab==='dash')renderDash(); if(tab==='produk')renderProdTable(); if(tab==='pos')renderPOS();
+  if(tab==='transaksi')renderTx(); if(tab==='hrd')renderEmp(); if(tab==='absensi')renderAbsen();
+  if(tab==='gaji')renderGaji(); if(tab==='lap')renderLap(); if(tab==='db')renderDB();
+}
+function renderDash(){
+  const today=new Date().toDateString();const tToday=transactions.filter(t=>new Date(t.tgl).toDateString()===today);
+  document.getElementById('stOmzet').textContent=rp(tToday.reduce((s,t)=>s+t.total,0));
+  document.getElementById('stTrans').textContent=transactions.length;
+  document.getElementById('stProd').textContent=products.length;
+  const low=products.filter(p=>p.stok<=10);document.getElementById('stLow').textContent=low.length+" stok menipis";
+  document.getElementById('stEmp').textContent=employees.filter(e=>e.status==="Aktif").length;
+  document.getElementById('lowStock').innerHTML=low.length?low.map(p=>`<div class="bg-berry/10 border-2 border-berry rounded-xl p-3 flex items-center gap-3"><span class="text-2xl">⚠️</span><div class="text-sm"><b>${esc(p.nama)}</b><div class="text-xs text-berry font-black">Sisa ${p.stok}! Segera restok.</div></div><button onclick="restock(${p.id})" class="ml-auto bg-berry text-white text-xs font-black px-3 py-1.5 rounded-lg">+50</button></div>`).join(''):`<div class="text-sm font-bold text-emerald-600">✅ Semua stok aman!</div>`;
+  const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d;});
+  const data=days.map(d=>transactions.filter(t=>new Date(t.tgl).toDateString()===d.toDateString()).reduce((s,t)=>s+t.total,0));
+  if(charts.s)charts.s.destroy();
+  charts.s=new Chart(document.getElementById('chSales'),{type:'line',data:{labels:days.map(d=>d.toLocaleDateString('id-ID',{weekday:'short'})),datasets:[{data,borderColor:'#FF2E63',backgroundColor:'rgba(255,46,99,.15)',fill:true,tension:.45,borderWidth:3,pointBackgroundColor:'#FFC300',pointBorderColor:'#1A1023'}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'Rp '+(v/1000)+'k'}}}}});
+  const catSum={};transactions.forEach(t=>t.items.forEach(i=>{const p=products.find(x=>x.id===i.id);const k=p?p.kat:"Lainnya";catSum[k]=(catSum[k]||0)+i.qty;}));
+  if(charts.c)charts.c.destroy();
+  charts.c=new Chart(document.getElementById('chCat'),{type:'doughnut',data:{labels:Object.keys(catSum),datasets:[{data:Object.values(catSum),backgroundColor:['#FF2E63','#FF9F1C','#FFC300','#2EC4B6','#845EC2','#08D9D6'],borderColor:'#1A1023',borderWidth:3}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{weight:'bold',size:11}}}}}});
+}
+function restock(id){const p=products.find(x=>x.id===id);p.stok+=50;save();renderDash();toast('Stok '+p.nama+' +50','📦','bg-mint');}
+function renderProdTable(){
+  document.getElementById('prodTable').innerHTML=products.map(p=>`<tr class="border-t-2 border-inky/10 hover:bg-cream">
+    <td class="p-3"><div class="flex items-center gap-2"><img src="${p.img}" onerror="this.src='https://picsum.photos/seed/km${p.id}/60/60'" class="w-10 h-10 rounded-lg object-cover border-2 border-inky"><div><b>${esc(p.nama)}</b><div class="text-[11px] text-gray-500">ID: PRD-${String(p.id).padStart(3,'0')}</div></div></div></td>
+    <td class="p-3"><span class="text-[11px] font-black px-2 py-1 rounded-full border-2 border-inky ${CAT_COLOR[p.kat]||'bg-gray-100'}">${p.kat}</span></td>
+    <td class="p-3 font-black text-berry">${rp(p.harga)}</td>
+    <td class="p-3"><span class="font-black ${p.stok<=10?'text-berry':'text-emerald-600'}">${p.stok}</span></td>
+    <td class="p-3">${p.terjual}</td>
+    <td class="p-3"><div class="flex gap-1"><button onclick="productForm(${p.id})" class="bg-sun text-xs font-black px-3 py-1.5 rounded-lg border-2 border-inky">✏️</button><button onclick="delProduct(${p.id})" class="bg-berry text-white text-xs font-black px-3 py-1.5 rounded-lg border-2 border-inky">🗑️</button></div></td></tr>`).join('');
+}
+function productForm(id=null){
+  const p=id?products.find(x=>x.id===id):{nama:"",kat:"Sembako",harga:"",coret:"",stok:"",img:"",badge:"",desc:""};
+  document.getElementById('formContent').innerHTML=`<h3 class="font-display font-bold text-xl">${id?'✏️ Edit':'➕ Tambah'} Produk</h3>
+  <div class="space-y-2.5 mt-4 text-sm font-semibold">
+  <div><label class="text-xs font-black">NAMA PRODUK</label><input id="f_nama" value="${esc(p.nama)}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div class="grid grid-cols-2 gap-2"><div><label class="text-xs font-black">KATEGORI</label><select id="f_kat" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2">${CATS.slice(1).map(c=>`<option ${p.kat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+  <div><label class="text-xs font-black">BADGE</label><input id="f_badge" value="${esc(p.badge||'')}" placeholder="Promo/Baru/..." class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div></div>
+  <div class="grid grid-cols-3 gap-2"><div><label class="text-xs font-black">HARGA</label><input id="f_harga" type="number" value="${p.harga}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div><label class="text-xs font-black">CORET</label><input id="f_coret" type="number" value="${p.coret||''}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div><label class="text-xs font-black">STOK</label><input id="f_stok" type="number" value="${p.stok}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div></div>
+  <div><label class="text-xs font-black">URL GAMBAR</label><input id="f_img" value="${esc(p.img||'')}" placeholder="https://... (kosong = random)" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div><label class="text-xs font-black">DESKRIPSI</label><textarea id="f_desc" rows="2" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2">${esc(p.desc||'')}</textarea></div>
+  <div class="flex gap-2"><button onclick="closeForm()" class="flex-1 bg-gray-200 font-bold py-2.5 rounded-xl border-[3px] border-inky">Batal</button><button onclick="saveProduct(${id||'null'})" class="flex-1 bg-berry text-white font-bold py-2.5 rounded-xl border-[3px] border-inky">💾 Simpan</button></div></div>`;
+  openForm();
+}
+function saveProduct(id){const nama=document.getElementById('f_nama').value.trim(),harga=+document.getElementById('f_harga').value,stok=+document.getElementById('f_stok').value;
+  if(!nama||!harga)return toast('Nama & harga wajib!','⚠️','bg-tangerine');
+  const d={nama,kat:document.getElementById('f_kat').value,harga,coret:+document.getElementById('f_coret').value||0,stok:stok||0,badge:document.getElementById('f_badge').value,img:document.getElementById('f_img').value||`https://picsum.photos/seed/km${Date.now()}/400/300`,desc:document.getElementById('f_desc').value};
+  if(id){Object.assign(products.find(x=>x.id===id),d);}else products.unshift({id:Math.max(...products.map(p=>p.id))+1,rating:5.0,terjual:0,...d});
+  save();closeForm();renderProdTable();toast('Produk tersimpan! (INSERT/UPDATE produk)','💾','bg-mint');}
+function delProduct(id){if(!confirm('Hapus produk ini?'))return;products=products.filter(p=>p.id!==id);save();renderProdTable();toast('Produk dihapus!','🗑️','bg-berry');}
+function openForm(){const m=document.getElementById('formModal');m.classList.remove('hidden');m.classList.add('flex');}
+function closeForm(){const m=document.getElementById('formModal');m.classList.add('hidden');m.classList.remove('flex');}
+
+/* POS */
+function renderPOS(){
+  const q=(document.getElementById('posSearch').value||"").toLowerCase();
+  const list=products.filter(p=>p.nama.toLowerCase().includes(q));
+  document.getElementById('posGrid').innerHTML=list.map(p=>`<button onclick="posAdd(${p.id})" class="bg-white border-[3px] border-inky rounded-2xl p-3 text-left hover:bg-sun/20 transition shadow-pops ${p.stok===0?'opacity-50':''}">
+    <div class="font-bold text-sm truncate">${esc(p.nama)}</div><div class="font-display font-bold text-berry">${rp(p.harga)}</div><div class="text-[11px] font-black ${p.stok<=10?'text-berry':'text-emerald-600'}">Stok: ${p.stok}</div></button>`).join('');
+  updPOS();
+}
+function posAdd(id){const p=products.find(x=>x.id===id);if(p.stok<=0)return toast('Stok habis!','😭','bg-berry');posCart[id]=(posCart[id]||0)+1;if(posCart[id]>p.stok){posCart[id]=p.stok;toast('Stok maksimal!','⚠️','bg-tangerine');}updPOS();}
+function posDec(id){posCart[id]--;if(posCart[id]<=0)delete posCart[id];updPOS();}
+function updPOS(){
+  const ids=Object.keys(posCart);
+  document.getElementById('posItems').innerHTML=ids.length?ids.map(id=>{const p=products.find(x=>x.id==id);const q=posCart[id];return `<div class="bg-white/10 rounded-xl p-2.5 flex items-center gap-2"><div class="flex-1"><div class="font-bold text-xs">${esc(p.nama)}</div><div class="text-[11px] text-white/50">${rp(p.harga)} × ${q}</div></div><button onclick="posDec(${id})" class="w-7 h-7 bg-white/20 rounded-lg font-black">−</button><span class="font-black text-sm w-6 text-center">${q}</span><button onclick="posAdd(${id})" class="w-7 h-7 bg-sun text-inky rounded-lg font-black">+</button></div>`;}).join(''):`<div class="text-center text-white/40 text-sm font-bold py-6">Klik produk untuk mulai transaksi 🧾</div>`;
+  const total=ids.reduce((s,id)=>s+products.find(x=>x.id==id).harga*posCart[id],0);
+  document.getElementById('posTotal').textContent=rp(total);calcPOS();
+}
+function calcPOS(){const total=Object.keys(posCart).reduce((s,id)=>s+products.find(x=>x.id==id).harga*posCart[id],0);const cash=+document.getElementById('posCash').value||0;document.getElementById('posChange').textContent=rp(Math.max(0,cash-total));}
+function posQuick(n){document.getElementById('posCash').value=(+document.getElementById('posCash').value||0)+n;calcPOS();}
+function posUangPas(){const total=Object.keys(posCart).reduce((s,id)=>s+products.find(x=>x.id==id).harga*posCart[id],0);document.getElementById('posCash').value=total;calcPOS();}
+function bayarPOS(){
+  const ids=Object.keys(posCart);if(!ids.length)return toast('Belum ada item!','🧾','bg-tangerine');
+  const total=ids.reduce((s,id)=>s+products.find(x=>x.id==id).harga*posCart[id],0);const cash=+document.getElementById('posCash').value||0;
+  if(cash<total)return toast('Uang kurang '+rp(total-cash),'💸','bg-berry');
+  const tx={id:"TRX-"+(1025+transactions.length),tgl:new Date().toISOString(),nama:"Pelanggan Toko",items:ids.map(id=>{const p=products.find(x=>x.id==id);return{id:p.id,nama:p.nama,harga:p.harga,qty:posCart[id]};}),total,sub:total,disc:0,ship:0,metode:"Tunai (POS)",kasir:"Siti Aminah",bayar:cash,kembali:cash-total};
+  transactions.unshift(tx);ids.forEach(id=>{const p=products.find(x=>x.id==id);p.stok-=posCart[id];p.terjual+=posCart[id];});
+  posCart={};document.getElementById('posCash').value="";document.getElementById('posNum').textContent="#"+(1026+transactions.length);
+  save();renderPOS();toast(`LUNAS! Kembali ${rp(tx.kembali)}`,'✅','bg-mint');confetti({particleCount:100,spread:80});
+}
+
+/* TRANSAKSI */
+function renderTx(){
+  document.getElementById('txList').innerHTML=transactions.map(t=>`<div class="bg-white border-[3px] border-inky rounded-2xl p-4 shadow-pops">
+    <div class="flex flex-wrap items-center gap-2"><span class="font-display font-bold">${t.id}</span><span class="text-[11px] font-black px-2 py-0.5 rounded-full bg-grape/10 border border-grape">${t.metode}</span><span class="text-[11px] font-bold text-inky/40">${new Date(t.tgl).toLocaleString('id-ID')}</span><span class="ml-auto font-display font-bold text-berry text-lg">${rp(t.total)}</span></div>
+    <div class="text-xs font-semibold text-inky/60 mt-1">👤 ${esc(t.nama)} • Kasir: ${esc(t.kasir||'-')} • ${t.items.map(i=>`${esc(i.nama)} ×${i.qty}`).join(', ')}</div></div>`).join('')||'<div class="text-center font-bold text-inky/40">Belum ada transaksi</div>';
+}
+function exportCSV(){
+  let csv="ID,Tanggal,Pelanggan,Items,Total,Metode,Kasir\n";
+  transactions.forEach(t=>{csv+=`${t.id},${new Date(t.tgl).toLocaleString('id-ID')},${t.nama},"${t.items.map(i=>i.nama+' x'+i.qty).join('; ')}",${t.total},${t.metode},${t.kasir||''}\n`;});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='laporan-transaksi.csv';a.click();toast('CSV terdownload!','⬇','bg-mint');
+}
+
+/* HRD */
+function renderHRDPreview(){
+  document.getElementById('hrdPreview').innerHTML=employees.slice(0,4).map(e=>`<div class="flex items-center gap-2 bg-cream border-2 border-inky rounded-xl p-2"><img src="${e.img}" class="w-9 h-9 rounded-lg border-2 border-inky object-cover"><div class="min-w-0"><div class="text-xs font-black truncate">${esc(e.nama)}</div><div class="text-[10px] font-bold text-inky/50">${esc(e.jabatan)}</div></div><span class="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full ${e.status==='Aktif'?'bg-emerald-100 text-emerald-700':'bg-sun'}">${e.status}</span></div>`).join('');
+  document.getElementById('hrdActiveCount').textContent=employees.filter(e=>e.status==='Aktif').length;
+  const vals=Object.values(attendance);document.getElementById('stHadir').textContent=vals.filter(v=>v.status==='Hadir').length;document.getElementById('stTelat').textContent=vals.filter(v=>v.status==='Terlambat').length;
+  document.getElementById('absenHadir').textContent=vals.filter(v=>v.status==='Hadir').length+"/"+employees.length;
+  document.getElementById('absensiDate').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function renderEmp(){
+  document.getElementById('empGrid').innerHTML=employees.map(e=>{const tot=e.gaji+e.tunj+e.bonus;return `<div class="bg-white border-[3px] border-inky rounded-2xl p-4 shadow-pops card-lift">
+    <div class="flex gap-3"><img src="${e.img}" class="w-16 h-16 rounded-2xl border-[3px] border-inky object-cover"><div><div class="font-display font-semibold">${esc(e.nama)}</div><div class="text-xs font-black text-grape">${esc(e.jabatan)}</div><div class="text-[11px] font-bold text-inky/50">${e.id} • ${esc(e.hp)}</div></div>
+    <span class="ml-auto h-fit text-[10px] font-black px-2 py-1 rounded-full border-2 ${e.status==='Aktif'?'bg-emerald-100 text-emerald-700 border-emerald-600':'bg-sun border-inky'}">${e.status}</span></div>
+    <div class="grid grid-cols-3 gap-1.5 mt-3 text-center text-[11px] font-black"><div class="bg-cream border-2 border-inky rounded-lg py-1.5">Pokok<br><span class="text-berry">${(e.gaji/1000000).toFixed(1)}jt</span></div><div class="bg-cream border-2 border-inky rounded-lg py-1.5">Tunjangan<br><span class="text-grape">${(e.tunj/1000)}k</span></div><div class="bg-inky text-sun border-2 border-inky rounded-lg py-1.5">Total<br>${(tot/1000000).toFixed(1)}jt</div></div>
+    <div class="flex gap-1.5 mt-3"><button onclick="empForm('${e.id}')" class="flex-1 bg-sun text-xs font-black py-2 rounded-lg border-2 border-inky">✏️ Edit</button><button onclick="slipGaji('${e.id}')" class="flex-1 bg-mint text-xs font-black py-2 rounded-lg border-2 border-inky">🧾 Slip</button><button onclick="delEmp('${e.id}')" class="bg-berry text-white text-xs font-black px-3 rounded-lg border-2 border-inky">🗑️</button></div></div>`;}).join('');
+}
+function empForm(id=null){
+  const e=id?employees.find(x=>x.id===id):{nama:"",jabatan:"Kasir",gaji:3000000,tunj:400000,bonus:200000,hp:"",status:"Aktif",masuk:new Date().toISOString().slice(0,10)};
+  document.getElementById('formContent').innerHTML=`<h3 class="font-display font-bold text-xl">${id?'✏️ Edit':'➕ Tambah'} Karyawan (HRD)</h3>
+  <div class="space-y-2.5 mt-4 text-sm font-semibold">
+  <div><label class="text-xs font-black">NAMA LENGKAP</label><input id="e_nama" value="${esc(e.nama)}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div class="grid grid-cols-2 gap-2"><div><label class="text-xs font-black">JABATAN</label><select id="e_jab" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2">${["Manager Toko","Kasir Shift 1","Kasir Shift 2","Pramuniaga","Admin Gudang","Kurir Antar"].map(j=>`<option ${e.jabatan===j?'selected':''}>${j}</option>`).join('')}</select></div>
+  <div><label class="text-xs font-black">STATUS</label><select id="e_status" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2">${["Aktif","Cuti","Nonaktif"].map(s=>`<option ${e.status===s?'selected':''}>${s}</option>`).join('')}</select></div></div>
+  <div class="grid grid-cols-3 gap-2"><div><label class="text-xs font-black">GAJI POKOK</label><input id="e_gaji" type="number" value="${e.gaji}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div><label class="text-xs font-black">TUNJANGAN</label><input id="e_tunj" type="number" value="${e.tunj}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div><label class="text-xs font-black">BONUS</label><input id="e_bonus" type="number" value="${e.bonus}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div></div>
+  <div class="grid grid-cols-2 gap-2"><div><label class="text-xs font-black">NO HP</label><input id="e_hp" value="${esc(e.hp||'')}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div>
+  <div><label class="text-xs font-black">TGL MASUK</label><input id="e_masuk" type="date" value="${e.masuk}" class="w-full mt-1 border-[3px] border-inky rounded-xl px-3 py-2"></div></div>
+  <div class="flex gap-2"><button onclick="closeForm()" class="flex-1 bg-gray-200 font-bold py-2.5 rounded-xl border-[3px] border-inky">Batal</button><button onclick="saveEmp('${id||''}')" class="flex-1 bg-grape text-white font-bold py-2.5 rounded-xl border-[3px] border-inky">💾 Simpan</button></div></div>`;
+  openForm();
+}
+function saveEmp(id){const nama=document.getElementById('e_nama').value.trim();if(!nama)return toast('Nama wajib!','⚠️','bg-tangerine');
+  const d={nama,jabatan:document.getElementById('e_jab').value,gaji:+document.getElementById('e_gaji').value||0,tunj:+document.getElementById('e_tunj').value||0,bonus:+document.getElementById('e_bonus').value||0,hp:document.getElementById('e_hp').value,status:document.getElementById('e_status').value,masuk:document.getElementById('e_masuk').value};
+  if(id)Object.assign(employees.find(x=>x.id===id),d);else{const nid="KRY-"+String(employees.length+1).padStart(3,'0');employees.push({id:nid,img:`https://i.pravatar.cc/120?img=${10+employees.length}`,...d});attendance[nid]={status:"Hadir",masuk:"08:00",pulang:"-"};}
+  save();closeForm();renderEmp();renderHRDPreview();toast('Data karyawan tersimpan! (tabel karyawan)','👥','bg-grape');}
+function delEmp(id){if(!confirm('Hapus karyawan '+id+'?'))return;employees=employees.filter(e=>e.id!==id);delete attendance[id];save();renderEmp();renderHRDPreview();toast('Karyawan dihapus','🗑️','bg-berry');}
+function slipGaji(id){
+  const e=employees.find(x=>x.id===id);const tot=e.gaji+e.tunj+e.bonus;
+  document.getElementById('formContent').innerHTML=`<div id="printArea"><div class="text-center border-b-[3px] border-inky pb-3"><div class="font-display font-bold text-xl">🧾 SLIP GAJI</div><div class="text-xs font-bold text-inky/50">KeloMart Berkah Jaya • Oktober 2026</div></div>
+  <div class="mt-3 space-y-1.5 text-sm font-semibold"><div class="flex justify-between"><span class="text-inky/50">Nama / ID</span><b>${esc(e.nama)} / ${e.id}</b></div><div class="flex justify-between"><span class="text-inky/50">Jabatan</span><b>${esc(e.jabatan)}</b></div>
+  <div class="border-t-2 border-dashed my-2"></div><div class="flex justify-between"><span>Gaji Pokok</span><span>${rp(e.gaji)}</span></div><div class="flex justify-between"><span>Tunjangan</span><span>${rp(e.tunj)}</span></div><div class="flex justify-between"><span>Bonus Kinerja</span><span>${rp(e.bonus)}</span></div>
+  <div class="flex justify-between font-display font-bold text-lg bg-sun border-[3px] border-inky rounded-xl px-3 py-2 mt-2"><span>TAKE HOME PAY</span><span>${rp(tot)}</span></div></div></div>
+  <div class="flex gap-2 mt-4"><button onclick="window.print()" class="flex-1 bg-white font-bold py-2.5 rounded-xl border-[3px] border-inky text-sm">🖨️ Cetak</button><button onclick="closeForm()" class="flex-1 bg-inky text-white font-bold py-2.5 rounded-xl border-[3px] border-inky text-sm">Tutup</button></div>`;
+  openForm();
+}
+function renderAbsen(){
+  document.getElementById('absenList').innerHTML=employees.map(e=>{const a=attendance[e.id]||{status:"-",masuk:"-",pulang:"-"};const col=a.status==="Hadir"?'bg-emerald-100 border-emerald-600 text-emerald-700':a.status==="Terlambat"?'bg-yellow-100 border-yellow-600 text-yellow-700':'bg-red-100 border-red-500 text-red-600';
+  return `<div class="bg-white border-[3px] border-inky rounded-2xl p-4 shadow-pops flex items-center gap-3"><img src="${e.img}" class="w-12 h-12 rounded-xl border-2 border-inky object-cover">
+  <div class="flex-1"><div class="font-bold text-sm">${esc(e.nama)}</div><div class="text-[11px] font-bold text-inky/50">Masuk: ${a.masuk} • Pulang: ${a.pulang}</div></div>
+  <select onchange="setAbsen('${e.id}',this.value)" class="text-xs font-black px-2 py-2 rounded-xl border-[3px] ${col}">${["Hadir","Terlambat","Izin","Sakit","Cuti","Alpha"].map(s=>`<option ${a.status===s?'selected':''}>${s}</option>`).join('')}</select></div>`;}).join('');
+}
+function setAbsen(id,st){const now=new Date().toTimeString().slice(0,5);attendance[id]={status:st,masuk:st==="Hadir"||st==="Terlambat"?now:"-",pulang:"-"};save();renderAbsen();renderHRDPreview();toast(`${id}: ${st}`,'🗓️','bg-sun');}
+function resetAbsen(){employees.forEach(e=>attendance[e.id]={status:"Hadir",masuk:"08:00",pulang:"-"});save();renderAbsen();renderHRDPreview();toast('Absensi direset!','↻','bg-mint');}
+function renderGaji(){
+  let tot=0;document.getElementById('gajiTable').innerHTML=employees.map(e=>{const t=e.gaji+e.tunj+e.bonus;tot+=t;return `<tr class="border-t-2 border-inky/10 hover:bg-cream"><td class="p-3"><b>${esc(e.nama)}</b><div class="text-[11px] text-gray-500">${e.id} • ${esc(e.jabatan)}</div></td><td class="p-3">${rp(e.gaji)}</td><td class="p-3">${rp(e.tunj)}</td><td class="p-3 text-mint font-black">+${rp(e.bonus)}</td><td class="p-3 font-black text-berry">${rp(t)}</td><td class="p-3"><button onclick="slipGaji('${e.id}')" class="bg-inky text-white text-xs font-black px-3 py-1.5 rounded-lg">🧾 Slip</button></td></tr>`;}).join('');
+  document.getElementById('payTotal').textContent=rp(tot);
+}
+function renderLap(){
+  const pay={};transactions.forEach(t=>pay[t.metode]=(pay[t.metode]||0)+1);
+  if(charts.p)charts.p.destroy();
+  charts.p=new Chart(document.getElementById('chPay'),{type:'bar',data:{labels:Object.keys(pay),datasets:[{data:Object.values(pay),backgroundColor:['#FF2E63','#FFC300','#2EC4B6','#845EC2'],borderColor:'#1A1023',borderWidth:3,borderRadius:10}]},options:{plugins:{legend:{display:false}}}});
+  const top=[...products].sort((a,b)=>b.terjual-a.terjual).slice(0,5);const mx=top[0]?top[0].terjual:1;
+  document.getElementById('topProd').innerHTML=top.map((p,i)=>`<div><div class="flex justify-between text-xs font-black"><span>${i+1}. ${esc(p.nama)}</span><span class="text-berry">${p.terjual} pcs</span></div><div class="stock-bar mt-1"><div class="stock-fill bg-gradient-to-r from-berry to-tangerine" style="width:${Math.round(p.terjual/mx*100)}%"></div></div></div>`).join('');
+  const om=transactions.reduce((s,t)=>s+t.total,0);
+  document.getElementById('lapSummary').innerHTML=[["💰","Total Omzet",rp(om),"bg-berry text-white"],["🧮","Transaksi",transactions.length+"x","bg-white"],["👥","Payroll HRD",rp(employees.reduce((s,e)=>s+e.gaji+e.tunj+e.bonus,0)),"bg-inky text-white"],["📦","Nilai Stok",rp(products.reduce((s,p)=>s+p.harga*p.stok,0)),"bg-sun"]].map(([i,l,v,c])=>`<div class="${c} border-[3px] border-inky rounded-2xl p-4 text-center shadow-pops"><div class="text-2xl">${i}</div><div class="font-display font-bold">${v}</div><div class="text-[11px] font-black opacity-60">${l}</div></div>`).join('');
+}
+function renderDB(){
+  document.getElementById('dbTables').innerHTML=["📂 kategori","📦 produk","👤 users","🧑‍🤝‍🧑 pelanggan","🧾 transaksi","📋 detail_transaksi","👥 karyawan","🗓️ absensi","💵 penggajian"].map(t=>`<div class="bg-white/10 border border-white/20 rounded-xl px-3 py-2.5">${t}</div>`).join('');
+}
+
+/* ============ CODE LAB ============ */
+const FILES = {
+"config/koneksi.php":{lang:"PHP • MySQLi",code:`<?php
+// ============================================
+//  KeloMart - Koneksi Database MySQL
+//  File: config/koneksi.php
+// ============================================
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "toko_kelontong";
+
+$koneksi = mysqli_connect($host, $user, $pass, $db);
+
+if (!$koneksi) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+mysqli_set_charset($koneksi, "utf8mb4");
+date_default_timezone_set("Asia/Jakarta");
+
+// Helper: anti SQL Injection
+function esc($str) {
+    global $koneksi;
+    return mysqli_real_escape_string($koneksi, $str);
+}
+function rupiah($n) {
+    return "Rp " . number_format($n, 0, ",", ".");
+}
+?>`},
+"database/toko_kelontong.sql":{lang:"SQL • MySQL 8.0",code:`-- ============================================
+--  DATABASE: toko_kelontong (Toko Kelontong + HRD)
+--  Import via phpMyAdmin
+-- ============================================
+CREATE DATABASE IF NOT EXISTS toko_kelontong
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE toko_kelontong;
+
+-- KATEGORI
+CREATE TABLE kategori (
+  id_kategori INT AUTO_INCREMENT PRIMARY KEY,
+  nama_kategori VARCHAR(50) NOT NULL,
+  icon VARCHAR(20)
+);
+
+-- PRODUK
+CREATE TABLE produk (
+  id_produk INT AUTO_INCREMENT PRIMARY KEY,
+  id_kategori INT NOT NULL,
+  nama VARCHAR(100) NOT NULL,
+  harga INT NOT NULL,
+  harga_coret INT DEFAULT 0,
+  stok INT DEFAULT 0,
+  rating DECIMAL(2,1) DEFAULT 5.0,
+  terjual INT DEFAULT 0,
+  gambar VARCHAR(255),
+  deskripsi TEXT,
+  FOREIGN KEY (id_kategori) REFERENCES kategori(id_kategori)
+});
+
+-- USERS (admin & kasir)
+CREATE TABLE users (
+  id_user INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  nama_lengkap VARCHAR(100),
+  role ENUM('admin','kasir') DEFAULT 'kasir'
+);
+
+-- PELANGGAN
+CREATE TABLE pelanggan (
+  id_pelanggan INT AUTO_INCREMENT PRIMARY KEY,
+  nama VARCHAR(100) NOT NULL,
+  no_hp VARCHAR(20),
+  alamat TEXT
+);
+
+-- TRANSAKSI
+CREATE TABLE transaksi (
+  id_transaksi INT AUTO_INCREMENT PRIMARY KEY,
+  id_user INT,
+  id_pelanggan INT,
+  tanggal DATETIME DEFAULT CURRENT_TIMESTAMP,
+  subtotal INT, diskon INT DEFAULT 0,
+  ongkir INT DEFAULT 0, total INT NOT NULL,
+  bayar INT, kembalian INT,
+  metode VARCHAR(30),
+  FOREIGN KEY (id_user) REFERENCES users(id_user),
+  FOREIGN KEY (id_pelanggan) REFERENCES pelanggan(id_pelanggan)
+);
+
+-- DETAIL TRANSAKSI
+CREATE TABLE detail_transaksi (
+  id_detail INT AUTO_INCREMENT PRIMARY KEY,
+  id_transaksi INT NOT NULL,
+  id_produk INT NOT NULL,
+  qty INT NOT NULL,
+  harga_satuan INT NOT NULL,
+  subtotal INT NOT NULL,
+  FOREIGN KEY (id_transaksi) REFERENCES transaksi(id_transaksi),
+  FOREIGN KEY (id_produk) REFERENCES produk(id_produk)
+);
+
+-- ===== MODUL HRD =====
+CREATE TABLE karyawan (
+  id_karyawan INT AUTO_INCREMENT PRIMARY KEY,
+  nama VARCHAR(100) NOT NULL,
+  jabatan VARCHAR(50),
+  no_hp VARCHAR(20),
+  gaji_pokok INT DEFAULT 0,
+  tunjangan INT DEFAULT 0,
+  bonus INT DEFAULT 0,
+  status ENUM('Aktif','Cuti','Nonaktif') DEFAULT 'Aktif',
+  tgl_masuk DATE, foto VARCHAR(255)
+);
+
+CREATE TABLE absensi (
+  id_absensi INT AUTO_INCREMENT PRIMARY KEY,
+  id_karyawan INT NOT NULL,
+  tanggal DATE NOT NULL,
+  jam_masuk TIME, jam_pulang TIME,
+  status ENUM('Hadir','Terlambat','Izin','Sakit','Cuti','Alpha'),
+  FOREIGN KEY (id_karyawan) REFERENCES karyawan(id_karyawan)
+);
+
+CREATE TABLE penggajian (
+  id_gaji INT AUTO_INCREMENT PRIMARY KEY,
+  id_karyawan INT NOT NULL,
+  periode VARCHAR(20),
+  total_gaji INT NOT NULL,
+  tanggal_bayar DATE,
+  FOREIGN KEY (id_karyawan) REFERENCES karyawan(id_karyawan)
+);
+
+-- DATA AWAL
+INSERT INTO kategori VALUES
+ (1,'Sembako','🍚'),(2,'Mie & Pasta','🍜'),
+ (3,'Minuman','🥤'),(4,'Snack','🍪'),
+ (5,'Bumbu Dapur','🧂'),(6,'Kebersihan','🧼');
+INSERT INTO users (username,password,nama_lengkap,role)
+ VALUES ('admin', MD5('admin123'), 'Administrator','admin');`},
+"index.php":{lang:"PHP • Katalog Toko",code:`<?php include "config/koneksi.php"; ?>
+<!DOCTYPE html>
+<html lang="id">
+<head><title>KeloMart - Toko Kelontong</title>
+<link rel="stylesheet" href="assets/style.css"></head>
+<body>
+<h1>🛒 Katalog Produk</h1>
+<form method="GET">
+  <input name="q" placeholder="Cari produk..."
+    value="<?= esc($_GET['q'] ?? '') ?>">
+  <button>Cari</button>
+</form>
+<div class="grid">
+<?php
+$q = esc($_GET['q'] ?? '');
+$kat = (int)($_GET['kat'] ?? 0);
+$sql = "SELECT p.*, k.nama_kategori FROM produk p
+        JOIN kategori k ON p.id_kategori=k.id_kategori
+        WHERE p.nama LIKE '%$q%'";
+if ($kat > 0) $sql .= " AND p.id_kategori=$kat";
+$sql .= " ORDER BY p.terjual DESC";
+$data = mysqli_query($koneksi, $sql);
+while ($p = mysqli_fetch_assoc($data)) { ?>
+  <div class="card">
+    <img src="<?= $p['gambar'] ?>">
+    <h3><?= $p['nama'] ?></h3>
+    <p class="harga"><?= rupiah($p['harga']) ?></p>
+    <small>Stok: <?= $p['stok'] ?></small>
+    <a href="keranjang.php?add=<?= $p['id_produk'] ?>">
+      + Keranjang
+    </a>
+  </div>
+<?php } ?>
+</div>
+</body></html>`},
+"keranjang.php":{lang:"PHP • Session Cart",code:`<?php
+session_start();
+include "config/koneksi.php";
+if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
+
+// Tambah ke keranjang
+if (isset($_GET['add'])) {
+    $id = (int)$_GET['add'];
+    $_SESSION['cart'][$id] = ($_SESSION['cart'][$id] ?? 0) + 1;
+    header("Location: keranjang.php"); exit;
+}
+// Ubah qty / hapus
+if (isset($_GET['del'])) {
+    unset($_SESSION['cart'][(int)$_GET['del']]);
+    header("Location: keranjang.php"); exit;
+}
+?>
+<h2>🛒 Keranjang Belanja</h2>
+<table border="1">
+<tr><th>Produk</th><th>Harga</th><th>Qty</th><th>Subtotal</th></tr>
+<?php
+$total = 0;
+foreach ($_SESSION['cart'] as $id => $qty) {
+    $p = mysqli_fetch_assoc(mysqli_query($koneksi,
+        "SELECT * FROM produk WHERE id_produk=$id"));
+    $sub = $p['harga'] * $qty; $total += $sub;
+    echo "<tr><td>{$p['nama']}</td><td>".rupiah($p['harga'])
+       . "</td><td>$qty</td><td>".rupiah($sub)."</td></tr>";
+}
+echo "<tr><td colspan='3'><b>TOTAL</b></td>
+      <td><b>".rupiah($total)."</b></td></tr>";
+?>
+</table>
+<a href="checkout.php">Checkout →</a>`},
+"checkout.php":{lang:"PHP • Transaksi",code:`<?php
+session_start();
+include "config/koneksi.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama = esc($_POST['nama']);
+    $hp   = esc($_POST['hp']);
+    $alamat = esc($_POST['alamat']);
+    $metode = esc($_POST['metode']);
+
+    // 1. Simpan pelanggan
+    mysqli_query($koneksi, "INSERT INTO pelanggan
+      (nama,no_hp,alamat) VALUES ('$nama','$hp','$alamat')");
+    $id_pel = mysqli_insert_id($koneksi);
+
+    // 2. Hitung total
+    $total = 0;
+    foreach ($_SESSION['cart'] as $id => $qty) {
+        $p = mysqli_fetch_assoc(mysqli_query($koneksi,
+            "SELECT * FROM produk WHERE id_produk=$id"));
+        $total += $p['harga'] * $qty;
+    }
+    $ongkir = ($total >= 100000) ? 0 : 8000;
+    $grand = $total + $ongkir;
+
+    // 3. Simpan transaksi
+    mysqli_query($koneksi, "INSERT INTO transaksi
+      (id_user,id_pelanggan,subtotal,ongkir,total,metode)
+      VALUES (1,$id_pel,$total,$ongkir,$grand,'$metode')");
+    $id_trx = mysqli_insert_id($koneksi);
+
+    // 4. Detail + kurangi stok
+    foreach ($_SESSION['cart'] as $id => $qty) {
+        $p = mysqli_fetch_assoc(mysqli_query($koneksi,
+            "SELECT * FROM produk WHERE id_produk=$id"));
+        $sub = $p['harga'] * $qty;
+        mysqli_query($koneksi, "INSERT INTO detail_transaksi
+          (id_transaksi,id_produk,qty,harga_satuan,subtotal)
+          VALUES ($id_trx,$id,$qty,{$p['harga']},$sub)");
+        mysqli_query($koneksi, "UPDATE produk SET
+          stok = stok - $qty, terjual = terjual + $qty
+          WHERE id_produk=$id");
+    }
+    $_SESSION['cart'] = [];
+    header("Location: struk.php?id=$id_trx"); exit;
+}
+?>
+<form method="POST">
+  <input name="nama" placeholder="Nama" required>
+  <input name="hp" placeholder="No HP" required>
+  <textarea name="alamat" placeholder="Alamat"></textarea>
+  <select name="metode">
+    <option>QRIS</option><option>COD</option>
+    <option>Transfer</option>
+  </select>
+  <button>Bayar Sekarang</button>
+</form>`},
+"auth/login.php":{lang:"PHP • Session Auth",code:`<?php
+session_start();
+include "../config/koneksi.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $u = esc($_POST['username']);
+    $p = md5($_POST['password']); // produksi: password_hash()
+    $q = mysqli_query($koneksi, "SELECT * FROM users
+        WHERE username='$u' AND password='$p'");
+    if (mysqli_num_rows($q) === 1) {
+        $_SESSION['user'] = mysqli_fetch_assoc($q);
+        header("Location: ../admin/dashboard.php");
+        exit;
+    } else {
+        $error = "Username / password salah!";
+    }
+}
+?>
+<h2>🔐 Login Admin / Kasir</h2>
+<?php if (!empty($error)) echo "<p>$error</p>"; ?>
+<form method="POST">
+  <input name="username" placeholder="username" required>
+  <input name="password" type="password" required>
+  <button>Masuk</button>
+</form>
+<small>Default: admin / admin123</small>`},
+"admin/dashboard.php":{lang:"PHP • Admin",code:`<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: ../auth/login.php"); exit;
+}
+include "../config/koneksi.php";
+
+// Statistik
+$omzet = mysqli_fetch_assoc(mysqli_query($koneksi,
+  "SELECT SUM(total) AS t FROM transaksi
+   WHERE DATE(tanggal)=CURDATE()"))['t'] ?? 0;
+$n_trx = mysqli_fetch_assoc(mysqli_query($koneksi,
+  "SELECT COUNT(*) c FROM transaksi"))['c'];
+$n_prod = mysqli_fetch_assoc(mysqli_query($koneksi,
+  "SELECT COUNT(*) c FROM produk"))['c'];
+$low = mysqli_query($koneksi,
+  "SELECT * FROM produk WHERE stok <= 10");
+?>
+<h1>📊 Dashboard - Halo, <?= $_SESSION['user']['nama_lengkap'] ?>!</h1>
+<div class="stats">
+  <div>Omzet Hari Ini: <?= rupiah($omzet) ?></div>
+  <div>Total Transaksi: <?= $n_trx ?></div>
+  <div>Total Produk: <?= $n_prod ?></div>
+</div>
+<h3>⚠️ Stok Menipis</h3>
+<ul>
+<?php while($p = mysqli_fetch_assoc($low)) {
+    echo "<li>{$p['nama']} - sisa {$p['stok']}</li>";
+} ?>
+</ul>
+<nav>
+  <a href="produk_crud.php">📦 Produk</a>
+  <a href="transaksi.php">🧮 Transaksi</a>
+  <a href="hrd_karyawan.php">👥 HRD</a>
+</nav>`},
+"admin/produk_crud.php":{lang:"PHP • CRUD Produk",code:`<?php
+session_start();
+include "../config/koneksi.php";
+
+// CREATE / UPDATE
+if (isset($_POST['simpan'])) {
+    $nama = esc($_POST['nama']);
+    $kat  = (int)$_POST['kategori'];
+    $harga= (int)$_POST['harga'];
+    $stok = (int)$_POST['stok'];
+    if (!empty($_POST['id'])) {
+        $id = (int)$_POST['id'];
+        mysqli_query($koneksi, "UPDATE produk SET
+          nama='$nama', id_kategori=$kat,
+          harga=$harga, stok=$stok
+          WHERE id_produk=$id");
+    } else {
+        mysqli_query($koneksi, "INSERT INTO produk
+          (id_kategori,nama,harga,stok)
+          VALUES ($kat,'$nama',$harga,$stok)");
+    }
+    header("Location: produk_crud.php"); exit;
+}
+// DELETE
+if (isset($_GET['hapus'])) {
+    $id = (int)$_GET['hapus'];
+    mysqli_query($koneksi,
+      "DELETE FROM produk WHERE id_produk=$id");
+    header("Location: produk_crud.php"); exit;
+}
+$data = mysqli_query($koneksi,
+  "SELECT p.*, k.nama_kategori FROM produk p
+   JOIN kategori k ON p.id_kategori=k.id_kategori");
+?>
+<h2>📦 Data Produk</h2>
+<table border="1">
+<tr><th>Nama</th><th>Kategori</th>
+    <th>Harga</th><th>Stok</th><th>Aksi</th></tr>
+<?php while($p = mysqli_fetch_assoc($data)) { ?>
+<tr>
+  <td><?= $p['nama'] ?></td>
+  <td><?= $p['nama_kategori'] ?></td>
+  <td><?= rupiah($p['harga']) ?></td>
+  <td><?= $p['stok'] ?></td>
+  <td><a href="?hapus=<?= $p['id_produk'] ?>"
+    onclick="return confirm('Hapus?')">Hapus</a></td>
+</tr>
+<?php } ?>
+</table>`},
+"admin/hrd_karyawan.php":{lang:"PHP • HRD ⭐",code:`<?php
+// ============================================
+//  MODUL HRD: Karyawan + Absensi + Gaji
+//  File: admin/hrd_karyawan.php
+// ============================================
+session_start();
+include "../config/koneksi.php";
+
+// --- TAMBAH / EDIT KARYAWAN ---
+if (isset($_POST['simpan_karyawan'])) {
+    $nama = esc($_POST['nama']);
+    $jab  = esc($_POST['jabatan']);
+    $hp   = esc($_POST['hp']);
+    $gapok= (int)$_POST['gaji_pokok'];
+    $tunj = (int)$_POST['tunjangan'];
+    $bonus= (int)$_POST['bonus'];
+    mysqli_query($koneksi, "INSERT INTO karyawan
+      (nama,jabatan,no_hp,gaji_pokok,tunjangan,bonus,tgl_masuk)
+      VALUES ('$nama','$jab','$hp',$gapok,$tunj,$bonus,CURDATE())");
+    header("Location: hrd_karyawan.php"); exit;
+}
+
+// --- CATAT ABSENSI ---
+if (isset($_POST['absen'])) {
+    $idk = (int)$_POST['id_karyawan'];
+    $st  = esc($_POST['status']);
+    mysqli_query($koneksi, "INSERT INTO absensi
+      (id_karyawan,tanggal,jam_masuk,status)
+      VALUES ($idk, CURDATE(), CURTIME(), '$st')");
+    header("Location: hrd_karyawan.php"); exit;
+}
+
+// --- HITUNG GAJI (tgl 25 tiap bulan) ---
+$karyawan = mysqli_query($koneksi, "SELECT * FROM karyawan
+    WHERE status='Aktif'");
+?>
+<h2>👥 HRD - Data Karyawan & Gaji</h2>
+<table border="1">
+<tr><th>Nama</th><th>Jabatan</th><th>Pokok</th>
+    <th>Tunjangan</th><th>Bonus</th><th>Total</th></tr>
+<?php $payroll = 0;
+while ($k = mysqli_fetch_assoc($karyawan)) {
+    $total = $k['gaji_pokok'] + $k['tunjangan'] + $k['bonus'];
+    $payroll += $total; ?>
+<tr>
+  <td><?= $k['nama'] ?></td><td><?= $k['jabatan'] ?></td>
+  <td><?= rupiah($k['gaji_pokok']) ?></td>
+  <td><?= rupiah($k['tunjangan']) ?></td>
+  <td><?= rupiah($k['bonus']) ?></td>
+  <td><b><?= rupiah($total) ?></b></td>
+</tr>
+<?php } ?>
+<tr><td colspan="5"><b>TOTAL PAYROLL</b></td>
+    <td><b><?= rupiah($payroll) ?></b></td></tr>
+</table>`},
+"admin/transaksi.php":{lang:"PHP • Laporan",code:`<?php
+session_start();
+include "../config/koneksi.php";
+
+$tgl1 = $_GET['dari'] ?? date('Y-m-01');
+$tgl2 = $_GET['sampai'] ?? date('Y-m-d');
+
+$q = mysqli_query($koneksi, "SELECT t.*, p.nama AS pelanggan,
+    u.nama_lengkap AS kasir FROM transaksi t
+    LEFT JOIN pelanggan p ON t.id_pelanggan=p.id_pelanggan
+    LEFT JOIN users u ON t.id_user=u.id_user
+    WHERE DATE(t.tanggal) BETWEEN '$tgl1' AND '$tgl2'
+    ORDER BY t.tanggal DESC");
+?>
+<h2>🧮 Laporan Transaksi</h2>
+<form>Dari <input type="date" name="dari" value="<?= $tgl1 ?>">
+Sampai <input type="date" name="sampai" value="<?= $tgl2 ?>">
+<button>Filter</button></form>
+<table border="1">
+<tr><th>ID</th><th>Tanggal</th><th>Pelanggan</th>
+    <th>Total</th><th>Metode</th><th>Kasir</th></tr>
+<?php $grand = 0;
+while ($t = mysqli_fetch_assoc($q)) {
+    $grand += $t['total']; ?>
+<tr><td>#<?= $t['id_transaksi'] ?></td>
+    <td><?= $t['tanggal'] ?></td>
+    <td><?= $t['pelanggan'] ?></td>
+    <td><?= rupiah($t['total']) ?></td>
+    <td><?= $t['metode'] ?></td>
+    <td><?= $t['kasir'] ?></td></tr>
+<?php } ?>
+<tr><td colspan="3"><b>GRAND TOTAL</b></td>
+    <td colspan="3"><b><?= rupiah($grand) ?></b></td></tr>
+</table>`},
+"api/api_produk.php":{lang:"PHP • JSON API",code:`<?php
+// API JSON: untuk frontend JS / aplikasi mobile
+// GET api/api_produk.php?q=beras
+header("Content-Type: application/json");
+include "../config/koneksi.php";
+
+$q = esc($_GET['q'] ?? '');
+$data = mysqli_query($koneksi, "SELECT p.*, k.nama_kategori
+    FROM produk p JOIN kategori k
+    ON p.id_kategori = k.id_kategori
+    WHERE p.nama LIKE '%$q%' LIMIT 50");
+
+$out = [];
+while ($r = mysqli_fetch_assoc($data)) $out[] = $r;
+
+echo json_encode([
+    "status" => "success",
+    "count"  => count($out),
+    "data"   => $out
+], JSON_PRETTY_PRINT);
+?>`}
+};
+const FILE_ICON={"php":"🐘","sql":"🗄️"};
+let curFile="config/koneksi.php";
+function renderFileTree(){
+  document.getElementById('fileTree').innerHTML=Object.keys(FILES).map(f=>{
+    const ext=f.split('.').pop();const active=f===curFile;
+    return `<button onclick="setFile('${f}')" class="w-full text-left px-3 py-2 rounded-xl flex items-center gap-2 transition ${active?'bg-sun text-inky font-black':'text-white/70 hover:bg-white/10'}"><span>${FILE_ICON[ext]||'📄'}</span><span class="truncate text-xs">${f}</span></button>`;}).join('');
+}
+function highlight(code){
+  let s=esc(code);
+  s=s.replace(/(&lt;\?php|\?&gt;)/g,'<span class="tok-k font-bold">$1</span>');
+  s=s.replace(/(\/\/.+|-- .+)/g,'<span class="tok-c">$1</span>');
+  s=s.replace(/(&quot;.*?&quot;|&#039;.*?&#039;|'[^']*'|"[^"]*")/g,'<span class="tok-s">$1</span>');
+  s=s.replace(/(\$[a-zA-Z_]+)/g,'<span class="tok-v">$1</span>');
+  s=s.replace(/\b(function|echo|if|else|while|foreach|for|return|include|require|session_start|header|exit|CREATE|TABLE|SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|JOIN|LEFT|ORDER|BY|AS|AND|OR|NOT|NULL|PRIMARY|KEY|FOREIGN|REFERENCES|AUTO_INCREMENT|DEFAULT|ENUM|INT|VARCHAR|TEXT|DATETIME|DATE|TIME|DECIMAL|UNIQUE|CURRENT_TIMESTAMP|CURDATE|CURTIME|COUNT|SUM|BETWEEN|LIMIT|AS)\b/g,'<span class="tok-k font-bold">$1</span>');
+  return s;
+}
+function setFile(f){curFile=f;renderFileTree();const file=FILES[f];
+  document.getElementById('codeTab').textContent=f;document.getElementById('codeLang').textContent="● "+file.lang;
+  const lines=file.code.split('\n');
+  document.getElementById('lineNums').innerHTML=lines.map((_,i)=>i+1).join('<br>');
+  document.getElementById('codeView').innerHTML=highlight(file.code);
+}
+function copyCode(){navigator.clipboard.writeText(FILES[curFile].code).then(()=>toast('Kode '+curFile+' dicopy!','📋','bg-grape'));}
+function downloadCode(){const f=FILES[curFile];const name=curFile.split('/').pop();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f.code],{type:'text/plain'}));a.download=name;a.click();toast(name+' terdownload!','⬇','bg-mint');}
+function downloadSQL(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([FILES["database/toko_kelontong.sql"].code],{type:'text/sql'}));a.download='toko_kelontong.sql';a.click();toast('Database .sql terdownload!','🗄️','bg-mint');}
+
+/* ============ TESTIMONI ============ */
+const TESTIS=[
+ {n:"Bu Tatik",r:"Ibu Rumah Tangga",t:"Berasnya pulen, minyaknya murah! Langganan tiap minggu, diantar sampai depan pintu. Pelayanannya ramah poll! ⭐⭐⭐⭐⭐",img:26,c:"bg-sun"},
+ {n:"Mas Bagas",r:"Anak Kos",t:"Indomie selalu ready, kopi lengkap. Jam 9 malam masih bisa pesan via WA. Penyelamat begadang! 🔥",img:12,c:"bg-mint"},
+ {n:"Pak RT Sugeng",r:"Ketua RT 05",t:"Sembako untuk 40 KK tiap Jumat berkah ambil di sini. Harga grosir, struk rapi, bisa transfer. Mantap! 👏",img:53,c:"bg-white"},
+ {n:"Kak Nabila",r:"Mahasiswi",t:"Snack & skincare mini lengkap! Kasirnya cepat, ada QRIS. Tempat favorit jajan sepulang kampus 💖",img:45,c:"bg-white"},
+ {n:"Bang Ojek Pangkalan",r:"Driver Ojol",t:"Kopiko & air mineral selalu stok buat di jalan. Harganya jujur, nggak getok. Berkah selalu tokonya! 🙏",img:59,c:"bg-ocean"},
+];
+function renderTesti(){document.getElementById('testiWrap').innerHTML=TESTIS.map(t=>`<div class="shrink-0 w-72 ${t.c} border-[3px] border-inky rounded-3xl p-5 shadow-pop rotate-[-1deg]"><div class="flex items-center gap-3"><img src="https://i.pravatar.cc/80?img=${t.img}" class="w-12 h-12 rounded-2xl border-[3px] border-inky object-cover"><div><div class="font-display font-semibold">${t.n}</div><div class="text-[11px] font-bold opacity-60">${t.r}</div></div></div><p class="text-sm font-medium mt-3">"${t.t}"</p></div>`).join('');}
+
+/* ============ INIT ============ */
+function reveal(){document.querySelectorAll('.scroll-reveal').forEach(el=>{const r=el.getBoundingClientRect();if(r.top<innerHeight-60)el.classList.add('show');});}
+window.addEventListener('scroll',reveal);
+let cdEnd=Date.now()+11*3600000+23*60000+45000;
+setInterval(()=>{let d=Math.max(0,cdEnd-Date.now());const h=Math.floor(d/3600000),m=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);document.getElementById('cdH').textContent=String(h).padStart(2,'0');document.getElementById('cdM').textContent=String(m).padStart(2,'0');document.getElementById('cdS').textContent=String(s).padStart(2,'0');},1000);
+function counters(){document.querySelectorAll('.counter').forEach(el=>{const t=+el.dataset.target;let c=0;const step=t/60;const iv=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(iv);}el.textContent=Math.floor(c).toLocaleString('id-ID');},25);});}
+setInterval(()=>{const w=document.getElementById('testiWrap');if(w&&!w.matches(':hover')){w.scrollLeft+=1;if(w.scrollLeft>=w.scrollWidth-w.clientWidth-5)w.scrollLeft=0;}},30);
+
+window.onload=()=>{
+  let p=0;const iv=setInterval(()=>{p+=20;document.getElementById('loadBar').style.width=p+"%";if(p>=100){clearInterval(iv);const pl=document.getElementById('preloader');pl.style.opacity="0";pl.style.visibility="hidden";}},150);
+  renderCats();renderProducts();updateCartUI();renderHRDPreview();renderTesti();renderFileTree();setFile(curFile);reveal();counters();
+  document.querySelectorAll('.pay-btn')[0].classList.add('tab-active');
+  setTimeout(()=>toast('Selamat datang di KeloMart! 🎉','🛒','bg-berry'),1500);
+  setTimeout(()=>toast('Pakai kode CERIA10 untuk diskon 10%','🏷️','bg-grape'),4500);
+};
+</script>
+</body>
+</html>
